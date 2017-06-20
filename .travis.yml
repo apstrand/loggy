@@ -1,0 +1,6 @@
+osx_image: xcode8.3
+language: swift
+xcode_project: Loggy.xcodeproj
+xcode_scheme: Loggy
+script: xcodebuild -project Loggy.xcodeproj -scheme Loggy ONLY_ACTIVE_ARCH=NO
+
