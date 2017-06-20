@@ -12,6 +12,7 @@
 		D05122001EF867DB00E7D825 /* LoggyMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */; };
 		D05122021EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D05122011EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets */; };
 		D05122051EF867DB00E7D825 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05122031EF867DB00E7D825 /* LaunchScreen.storyboard */; };
+		D051220D1EF8A31800E7D825 /* GPSTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D051220C1EF8A31800E7D825 /* GPSTracker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		D05122011EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Loggy_iOS_Assets.xcassets; sourceTree = "<group>"; };
 		D05122041EF867DB00E7D825 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D05122061EF867DB00E7D825 /* Loggy_iOS_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Loggy_iOS_Info.plist; sourceTree = "<group>"; };
+		D051220C1EF8A31800E7D825 /* GPSTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSTracker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 		D05121F91EF867DB00E7D825 /* Loggy */ = {
 			isa = PBXGroup;
 			children = (
+				D051220C1EF8A31800E7D825 /* GPSTracker.swift */,
 				D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */,
 				D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */,
 				D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */,
@@ -135,6 +138,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D051220D1EF8A31800E7D825 /* GPSTracker.swift in Sources */,
 				D05121FD1EF867DB00E7D825 /* DashboardViewController.swift in Sources */,
 				D05121FB1EF867DB00E7D825 /* LoggyAppDelegate.swift in Sources */,
 			);
