@@ -7,21 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D05121FB1EF867DB00E7D825 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05121FA1EF867DB00E7D825 /* AppDelegate.swift */; };
-		D05121FD1EF867DB00E7D825 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05121FC1EF867DB00E7D825 /* ViewController.swift */; };
-		D05122001EF867DB00E7D825 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05121FE1EF867DB00E7D825 /* Main.storyboard */; };
-		D05122021EF867DB00E7D825 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D05122011EF867DB00E7D825 /* Assets.xcassets */; };
+		D05121FB1EF867DB00E7D825 /* LoggyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */; };
+		D05121FD1EF867DB00E7D825 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */; };
+		D05122001EF867DB00E7D825 /* LoggyMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */; };
+		D05122021EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D05122011EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets */; };
 		D05122051EF867DB00E7D825 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05122031EF867DB00E7D825 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D05121F71EF867DB00E7D825 /* Loggy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Loggy.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D05121FA1EF867DB00E7D825 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D05121FC1EF867DB00E7D825 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		D05121FF1EF867DB00E7D825 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		D05122011EF867DB00E7D825 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggyAppDelegate.swift; sourceTree = "<group>"; };
+		D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
+		D05121FF1EF867DB00E7D825 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LoggyMain.storyboard; sourceTree = "<group>"; };
+		D05122011EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Loggy_iOS_Assets.xcassets; sourceTree = "<group>"; };
 		D05122041EF867DB00E7D825 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		D05122061EF867DB00E7D825 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D05122061EF867DB00E7D825 /* Loggy_iOS_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Loggy_iOS_Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,12 +54,12 @@
 		D05121F91EF867DB00E7D825 /* Loggy */ = {
 			isa = PBXGroup;
 			children = (
-				D05121FA1EF867DB00E7D825 /* AppDelegate.swift */,
-				D05121FC1EF867DB00E7D825 /* ViewController.swift */,
-				D05121FE1EF867DB00E7D825 /* Main.storyboard */,
-				D05122011EF867DB00E7D825 /* Assets.xcassets */,
+				D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */,
+				D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */,
+				D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */,
+				D05122011EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets */,
 				D05122031EF867DB00E7D825 /* LaunchScreen.storyboard */,
-				D05122061EF867DB00E7D825 /* Info.plist */,
+				D05122061EF867DB00E7D825 /* Loggy_iOS_Info.plist */,
 			);
 			path = Loggy;
 			sourceTree = "<group>";
@@ -123,8 +123,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D05122051EF867DB00E7D825 /* LaunchScreen.storyboard in Resources */,
-				D05122021EF867DB00E7D825 /* Assets.xcassets in Resources */,
-				D05122001EF867DB00E7D825 /* Main.storyboard in Resources */,
+				D05122021EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets in Resources */,
+				D05122001EF867DB00E7D825 /* LoggyMain.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,20 +135,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D05121FD1EF867DB00E7D825 /* ViewController.swift in Sources */,
-				D05121FB1EF867DB00E7D825 /* AppDelegate.swift in Sources */,
+				D05121FD1EF867DB00E7D825 /* DashboardViewController.swift in Sources */,
+				D05121FB1EF867DB00E7D825 /* LoggyAppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		D05121FE1EF867DB00E7D825 /* Main.storyboard */ = {
+		D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				D05121FF1EF867DB00E7D825 /* Base */,
 			);
-			name = Main.storyboard;
+			name = LoggyMain.storyboard;
 			sourceTree = "<group>";
 		};
 		D05122031EF867DB00E7D825 /* LaunchScreen.storyboard */ = {
@@ -272,7 +272,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 3286TR25A4;
-				INFOPLIST_FILE = Loggy/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Loggy/Loggy_iOS_Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = se.nena.Loggy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -285,7 +285,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 3286TR25A4;
-				INFOPLIST_FILE = Loggy/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Loggy/Loggy_iOS_Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = se.nena.Loggy;
 				PRODUCT_NAME = "$(TARGET_NAME)";

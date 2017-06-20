@@ -9,7 +9,7 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class LoggyAppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
 
