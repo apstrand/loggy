@@ -13,6 +13,8 @@
 		D05122021EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D05122011EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets */; };
 		D05122051EF867DB00E7D825 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05122031EF867DB00E7D825 /* LaunchScreen.storyboard */; };
 		D051220D1EF8A31800E7D825 /* GPSTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D051220C1EF8A31800E7D825 /* GPSTracker.swift */; };
+		D09B2DA41EFA329F005A29D8 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = D09B2DA21EFA329F005A29D8 /* iTunesArtwork */; };
+		D09B2DA51EFA329F005A29D8 /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = D09B2DA31EFA329F005A29D8 /* iTunesArtwork@2x */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		D05122041EF867DB00E7D825 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D05122061EF867DB00E7D825 /* Loggy_iOS_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Loggy_iOS_Info.plist; sourceTree = "<group>"; };
 		D051220C1EF8A31800E7D825 /* GPSTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSTracker.swift; sourceTree = "<group>"; };
+		D09B2DA21EFA329F005A29D8 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
+		D09B2DA31EFA329F005A29D8 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +60,7 @@
 		D05121F91EF867DB00E7D825 /* Loggy */ = {
 			isa = PBXGroup;
 			children = (
+				D09B2DA01EFA3287005A29D8 /* assets */,
 				D051220C1EF8A31800E7D825 /* GPSTracker.swift */,
 				D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */,
 				D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */,
@@ -65,6 +70,23 @@
 				D05122061EF867DB00E7D825 /* Loggy_iOS_Info.plist */,
 			);
 			path = Loggy;
+			sourceTree = "<group>";
+		};
+		D09B2DA01EFA3287005A29D8 /* assets */ = {
+			isa = PBXGroup;
+			children = (
+				D09B2DA11EFA328C005A29D8 /* icon */,
+			);
+			name = assets;
+			sourceTree = "<group>";
+		};
+		D09B2DA11EFA328C005A29D8 /* icon */ = {
+			isa = PBXGroup;
+			children = (
+				D09B2DA21EFA329F005A29D8 /* iTunesArtwork */,
+				D09B2DA31EFA329F005A29D8 /* iTunesArtwork@2x */,
+			);
+			name = icon;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,9 +147,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D09B2DA51EFA329F005A29D8 /* iTunesArtwork@2x in Resources */,
 				D05122051EF867DB00E7D825 /* LaunchScreen.storyboard in Resources */,
 				D05122021EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets in Resources */,
 				D05122001EF867DB00E7D825 /* LoggyMain.storyboard in Resources */,
+				D09B2DA41EFA329F005A29D8 /* iTunesArtwork in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
