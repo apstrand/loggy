@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "16B31513D1637B308A48D541CC4AD4B4BCEC3AEA",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "87A71A792951F6C8A65A4B0AAB95315F6FFDE424" : 9223372036854775807,
+    "16B31513D1637B308A48D541CC4AD4B4BCEC3AEA" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "D7FF9321-9467-4F36-86BF-A832433E6F50",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "87A71A792951F6C8A65A4B0AAB95315F6FFDE424" : "",
+    "16B31513D1637B308A48D541CC4AD4B4BCEC3AEA" : "loggy\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Loggy",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Loggy.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:apstrand\/loggy.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "16B31513D1637B308A48D541CC4AD4B4BCEC3AEA"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "git.nena.se:repos\/nena",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "87A71A792951F6C8A65A4B0AAB95315F6FFDE424"
+    }
+  ]
+}
