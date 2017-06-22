@@ -7,17 +7,47 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D011DECB1EFC052100A80A77 /* LoggyTools.h in Headers */ = {isa = PBXBuildFile; fileRef = D011DEC91EFC052100A80A77 /* LoggyTools.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D011DECE1EFC052100A80A77 /* LoggyTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D011DEC71EFC052100A80A77 /* LoggyTools.framework */; };
+		D011DECF1EFC052100A80A77 /* LoggyTools.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D011DEC71EFC052100A80A77 /* LoggyTools.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D011DED41EFC09CC00A80A77 /* GPSTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D051220C1EF8A31800E7D825 /* GPSTracker.swift */; };
 		D05121FB1EF867DB00E7D825 /* LoggyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */; };
 		D05121FD1EF867DB00E7D825 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */; };
 		D05122001EF867DB00E7D825 /* LoggyMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */; };
 		D05122021EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D05122011EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets */; };
 		D05122051EF867DB00E7D825 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05122031EF867DB00E7D825 /* LaunchScreen.storyboard */; };
-		D051220D1EF8A31800E7D825 /* GPSTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D051220C1EF8A31800E7D825 /* GPSTracker.swift */; };
 		D09B2DA41EFA329F005A29D8 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = D09B2DA21EFA329F005A29D8 /* iTunesArtwork */; };
 		D09B2DA51EFA329F005A29D8 /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = D09B2DA31EFA329F005A29D8 /* iTunesArtwork@2x */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		D011DECC1EFC052100A80A77 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D05121EF1EF867DA00E7D825 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D011DEC61EFC052100A80A77;
+			remoteInfo = LoggyTools;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D011DED31EFC052100A80A77 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D011DECF1EFC052100A80A77 /* LoggyTools.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		D011DEC71EFC052100A80A77 /* LoggyTools.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LoggyTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D011DEC91EFC052100A80A77 /* LoggyTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoggyTools.h; sourceTree = "<group>"; };
+		D011DECA1EFC052100A80A77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D05121F71EF867DB00E7D825 /* Loggy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Loggy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggyAppDelegate.swift; sourceTree = "<group>"; };
 		D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
@@ -26,25 +56,44 @@
 		D05122041EF867DB00E7D825 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D05122061EF867DB00E7D825 /* Loggy_iOS_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Loggy_iOS_Info.plist; sourceTree = "<group>"; };
 		D051220C1EF8A31800E7D825 /* GPSTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSTracker.swift; sourceTree = "<group>"; };
-		D09B2DA21EFA329F005A29D8 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
-		D09B2DA31EFA329F005A29D8 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = "<group>"; };
+		D09B2DA21EFA329F005A29D8 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = ../assets/icon/iTunesArtwork; sourceTree = "<group>"; };
+		D09B2DA31EFA329F005A29D8 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; name = "iTunesArtwork@2x"; path = "../assets/icon/iTunesArtwork@2x"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		D05121F41EF867DA00E7D825 /* Frameworks */ = {
+		D011DEC31EFC052100A80A77 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D05121F41EF867DA00E7D825 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D011DECE1EFC052100A80A77 /* LoggyTools.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D011DEC81EFC052100A80A77 /* LoggyTools */ = {
+			isa = PBXGroup;
+			children = (
+				D051220C1EF8A31800E7D825 /* GPSTracker.swift */,
+				D011DEC91EFC052100A80A77 /* LoggyTools.h */,
+				D011DECA1EFC052100A80A77 /* Info.plist */,
+			);
+			path = LoggyTools;
+			sourceTree = "<group>";
+		};
 		D05121EE1EF867DA00E7D825 = {
 			isa = PBXGroup;
 			children = (
 				D05121F91EF867DB00E7D825 /* Loggy */,
+				D011DEC81EFC052100A80A77 /* LoggyTools */,
 				D05121F81EF867DB00E7D825 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -53,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				D05121F71EF867DB00E7D825 /* Loggy.app */,
+				D011DEC71EFC052100A80A77 /* LoggyTools.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,7 +111,6 @@
 			isa = PBXGroup;
 			children = (
 				D09B2DA01EFA3287005A29D8 /* assets */,
-				D051220C1EF8A31800E7D825 /* GPSTracker.swift */,
 				D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */,
 				D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */,
 				D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */,
@@ -91,7 +140,36 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		D011DEC41EFC052100A80A77 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D011DECB1EFC052100A80A77 /* LoggyTools.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		D011DEC61EFC052100A80A77 /* LoggyTools */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D011DED01EFC052100A80A77 /* Build configuration list for PBXNativeTarget "LoggyTools" */;
+			buildPhases = (
+				D011DEC21EFC052100A80A77 /* Sources */,
+				D011DEC31EFC052100A80A77 /* Frameworks */,
+				D011DEC41EFC052100A80A77 /* Headers */,
+				D011DEC51EFC052100A80A77 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LoggyTools;
+			productName = LoggyTools;
+			productReference = D011DEC71EFC052100A80A77 /* LoggyTools.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		D05121F61EF867DA00E7D825 /* Loggy */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D05122091EF867DB00E7D825 /* Build configuration list for PBXNativeTarget "Loggy" */;
@@ -99,10 +177,12 @@
 				D05121F31EF867DA00E7D825 /* Sources */,
 				D05121F41EF867DA00E7D825 /* Frameworks */,
 				D05121F51EF867DA00E7D825 /* Resources */,
+				D011DED31EFC052100A80A77 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D011DECD1EFC052100A80A77 /* PBXTargetDependency */,
 			);
 			name = Loggy;
 			productName = Loggy;
@@ -119,6 +199,9 @@
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Peter Strand";
 				TargetAttributes = {
+					D011DEC61EFC052100A80A77 = {
+						CreatedOnToolsVersion = 9.0;
+					};
 					D05121F61EF867DA00E7D825 = {
 						CreatedOnToolsVersion = 9.0;
 					};
@@ -138,11 +221,19 @@
 			projectRoot = "";
 			targets = (
 				D05121F61EF867DA00E7D825 /* Loggy */,
+				D011DEC61EFC052100A80A77 /* LoggyTools */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D011DEC51EFC052100A80A77 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D05121F51EF867DA00E7D825 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -158,17 +249,32 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D011DEC21EFC052100A80A77 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D011DED41EFC09CC00A80A77 /* GPSTracker.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D05121F31EF867DA00E7D825 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D051220D1EF8A31800E7D825 /* GPSTracker.swift in Sources */,
 				D05121FD1EF867DB00E7D825 /* DashboardViewController.swift in Sources */,
 				D05121FB1EF867DB00E7D825 /* LoggyAppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D011DECD1EFC052100A80A77 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D011DEC61EFC052100A80A77 /* LoggyTools */;
+			targetProxy = D011DECC1EFC052100A80A77 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */ = {
@@ -190,6 +296,54 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		D011DED11EFC052100A80A77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 3286TR25A4;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = LoggyTools/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = se.nena.LoggyTools;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		D011DED21EFC052100A80A77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 3286TR25A4;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = LoggyTools/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = se.nena.LoggyTools;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		D05122071EF867DB00E7D825 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -298,6 +452,7 @@
 		D051220A1EF867DB00E7D825 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 3286TR25A4;
 				INFOPLIST_FILE = "$(SRCROOT)/Loggy/Loggy_iOS_Info.plist";
@@ -311,6 +466,7 @@
 		D051220B1EF867DB00E7D825 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 3286TR25A4;
 				INFOPLIST_FILE = "$(SRCROOT)/Loggy/Loggy_iOS_Info.plist";
@@ -324,6 +480,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D011DED01EFC052100A80A77 /* Build configuration list for PBXNativeTarget "LoggyTools" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D011DED11EFC052100A80A77 /* Debug */,
+				D011DED21EFC052100A80A77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		D05121F21EF867DA00E7D825 /* Build configuration list for PBXProject "Loggy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
