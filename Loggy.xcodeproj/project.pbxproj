@@ -16,8 +16,13 @@
 		D05122001EF867DB00E7D825 /* LoggyMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */; };
 		D05122021EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D05122011EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets */; };
 		D05122051EF867DB00E7D825 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05122031EF867DB00E7D825 /* LaunchScreen.storyboard */; };
+		D083A9BD1EFD5CB100B8EA0D /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0FE7A1F1EFC617800F44AAE /* NotificationCenter.framework */; };
+		D083A9C31EFD5CB100B8EA0D /* LoggyTodayInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D083A9C11EFD5CB100B8EA0D /* LoggyTodayInterface.storyboard */; };
+		D083A9C71EFD5CB100B8EA0D /* LoggyTodayExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D083A9BC1EFD5CB100B8EA0D /* LoggyTodayExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D09B2DA41EFA329F005A29D8 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = D09B2DA21EFA329F005A29D8 /* iTunesArtwork */; };
 		D09B2DA51EFA329F005A29D8 /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = D09B2DA31EFA329F005A29D8 /* iTunesArtwork@2x */; };
+		D0C488D91EFE95DD00319808 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0C488D81EFE95DD00319808 /* MapKit.framework */; };
+		D0C488DA1EFE962700319808 /* LoggyTodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D083A9BF1EFD5CB100B8EA0D /* LoggyTodayViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,6 +32,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = D011DEC61EFC052100A80A77;
 			remoteInfo = LoggyTools;
+		};
+		D083A9C51EFD5CB100B8EA0D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D05121EF1EF867DA00E7D825 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D083A9BB1EFD5CB100B8EA0D;
+			remoteInfo = LoggyTodayExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -42,12 +54,23 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D0FE7A2E1EFC617800F44AAE /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D083A9C71EFD5CB100B8EA0D /* LoggyTodayExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		D011DEC71EFC052100A80A77 /* LoggyTools.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LoggyTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D011DEC91EFC052100A80A77 /* LoggyTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoggyTools.h; sourceTree = "<group>"; };
-		D011DECA1EFC052100A80A77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D011DECA1EFC052100A80A77 /* LoggyTools_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = LoggyTools_Info.plist; sourceTree = "<group>"; };
 		D05121F71EF867DB00E7D825 /* Loggy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Loggy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggyAppDelegate.swift; sourceTree = "<group>"; };
 		D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
@@ -56,8 +79,16 @@
 		D05122041EF867DB00E7D825 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D05122061EF867DB00E7D825 /* Loggy_iOS_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Loggy_iOS_Info.plist; sourceTree = "<group>"; };
 		D051220C1EF8A31800E7D825 /* GPSTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSTracker.swift; sourceTree = "<group>"; };
+		D083A9BC1EFD5CB100B8EA0D /* LoggyTodayExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LoggyTodayExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D083A9BF1EFD5CB100B8EA0D /* LoggyTodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggyTodayViewController.swift; sourceTree = "<group>"; };
+		D083A9C21EFD5CB100B8EA0D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LoggyTodayInterface.storyboard; sourceTree = "<group>"; };
+		D083A9C41EFD5CB100B8EA0D /* LoggyToday_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = LoggyToday_Info.plist; sourceTree = "<group>"; };
 		D09B2DA21EFA329F005A29D8 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = ../assets/icon/iTunesArtwork; sourceTree = "<group>"; };
 		D09B2DA31EFA329F005A29D8 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; name = "iTunesArtwork@2x"; path = "../assets/icon/iTunesArtwork@2x"; sourceTree = "<group>"; };
+		D0C488D71EFE95A400319808 /* LoggyTodayExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LoggyTodayExtension.entitlements; sourceTree = "<group>"; };
+		D0C488D81EFE95DD00319808 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		D0FE7A1F1EFC617800F44AAE /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
+		D0FE7A301EFC66AD00F44AAE /* Loggy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Loggy.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +103,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0C488D91EFE95DD00319808 /* MapKit.framework in Frameworks */,
 				D011DECE1EFC052100A80A77 /* LoggyTools.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D083A9B91EFD5CB100B8EA0D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D083A9BD1EFD5CB100B8EA0D /* NotificationCenter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,7 +124,7 @@
 			children = (
 				D051220C1EF8A31800E7D825 /* GPSTracker.swift */,
 				D011DEC91EFC052100A80A77 /* LoggyTools.h */,
-				D011DECA1EFC052100A80A77 /* Info.plist */,
+				D011DECA1EFC052100A80A77 /* LoggyTools_Info.plist */,
 			);
 			path = LoggyTools;
 			sourceTree = "<group>";
@@ -94,6 +134,8 @@
 			children = (
 				D05121F91EF867DB00E7D825 /* Loggy */,
 				D011DEC81EFC052100A80A77 /* LoggyTools */,
+				D083A9BE1EFD5CB100B8EA0D /* LoggyTodayExtension */,
+				D0FE7A1E1EFC617800F44AAE /* Frameworks */,
 				D05121F81EF867DB00E7D825 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -103,6 +145,7 @@
 			children = (
 				D05121F71EF867DB00E7D825 /* Loggy.app */,
 				D011DEC71EFC052100A80A77 /* LoggyTools.framework */,
+				D083A9BC1EFD5CB100B8EA0D /* LoggyTodayExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -113,12 +156,24 @@
 				D09B2DA01EFA3287005A29D8 /* assets */,
 				D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */,
 				D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */,
-				D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */,
 				D05122011EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets */,
+				D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */,
 				D05122031EF867DB00E7D825 /* LaunchScreen.storyboard */,
+				D0FE7A301EFC66AD00F44AAE /* Loggy.entitlements */,
 				D05122061EF867DB00E7D825 /* Loggy_iOS_Info.plist */,
 			);
 			path = Loggy;
+			sourceTree = "<group>";
+		};
+		D083A9BE1EFD5CB100B8EA0D /* LoggyTodayExtension */ = {
+			isa = PBXGroup;
+			children = (
+				D0C488D71EFE95A400319808 /* LoggyTodayExtension.entitlements */,
+				D083A9BF1EFD5CB100B8EA0D /* LoggyTodayViewController.swift */,
+				D083A9C11EFD5CB100B8EA0D /* LoggyTodayInterface.storyboard */,
+				D083A9C41EFD5CB100B8EA0D /* LoggyToday_Info.plist */,
+			);
+			path = LoggyTodayExtension;
 			sourceTree = "<group>";
 		};
 		D09B2DA01EFA3287005A29D8 /* assets */ = {
@@ -136,6 +191,15 @@
 				D09B2DA31EFA329F005A29D8 /* iTunesArtwork@2x */,
 			);
 			name = icon;
+			sourceTree = "<group>";
+		};
+		D0FE7A1E1EFC617800F44AAE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D0C488D81EFE95DD00319808 /* MapKit.framework */,
+				D0FE7A1F1EFC617800F44AAE /* NotificationCenter.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -178,16 +242,35 @@
 				D05121F41EF867DA00E7D825 /* Frameworks */,
 				D05121F51EF867DA00E7D825 /* Resources */,
 				D011DED31EFC052100A80A77 /* Embed Frameworks */,
+				D0FE7A2E1EFC617800F44AAE /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				D011DECD1EFC052100A80A77 /* PBXTargetDependency */,
+				D083A9C61EFD5CB100B8EA0D /* PBXTargetDependency */,
 			);
 			name = Loggy;
 			productName = Loggy;
 			productReference = D05121F71EF867DB00E7D825 /* Loggy.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D083A9BB1EFD5CB100B8EA0D /* LoggyTodayExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D083A9C81EFD5CB100B8EA0D /* Build configuration list for PBXNativeTarget "LoggyTodayExtension" */;
+			buildPhases = (
+				D083A9B81EFD5CB100B8EA0D /* Sources */,
+				D083A9B91EFD5CB100B8EA0D /* Frameworks */,
+				D083A9BA1EFD5CB100B8EA0D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LoggyTodayExtension;
+			productName = LoggyTodayExtension;
+			productReference = D083A9BC1EFD5CB100B8EA0D /* LoggyTodayExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -195,15 +278,39 @@
 		D05121EF1EF867DA00E7D825 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0900;
+				LastSwiftUpdateCheck = 0830;
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Peter Strand";
 				TargetAttributes = {
 					D011DEC61EFC052100A80A77 = {
 						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
 					};
 					D05121F61EF867DA00E7D825 = {
 						CreatedOnToolsVersion = 9.0;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
+					};
+					D083A9BB1EFD5CB100B8EA0D = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -222,6 +329,7 @@
 			targets = (
 				D05121F61EF867DA00E7D825 /* Loggy */,
 				D011DEC61EFC052100A80A77 /* LoggyTools */,
+				D083A9BB1EFD5CB100B8EA0D /* LoggyTodayExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -246,6 +354,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D083A9BA1EFD5CB100B8EA0D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D083A9C31EFD5CB100B8EA0D /* LoggyTodayInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -266,6 +382,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D083A9B81EFD5CB100B8EA0D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0C488DA1EFE962700319808 /* LoggyTodayViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -273,6 +397,11 @@
 			isa = PBXTargetDependency;
 			target = D011DEC61EFC052100A80A77 /* LoggyTools */;
 			targetProxy = D011DECC1EFC052100A80A77 /* PBXContainerItemProxy */;
+		};
+		D083A9C61EFD5CB100B8EA0D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D083A9BB1EFD5CB100B8EA0D /* LoggyTodayExtension */;
+			targetProxy = D083A9C51EFD5CB100B8EA0D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -293,6 +422,14 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		D083A9C11EFD5CB100B8EA0D /* LoggyTodayInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D083A9C21EFD5CB100B8EA0D /* Base */,
+			);
+			name = LoggyTodayInterface.storyboard;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -300,20 +437,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 3286TR25A4;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = LoggyTools/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/LoggyTools/LoggyTools_Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = se.nena.LoggyTools;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -324,20 +463,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 3286TR25A4;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = LoggyTools/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/LoggyTools/LoggyTools_Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = se.nena.LoggyTools;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -454,6 +595,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Loggy/Loggy.entitlements;
 				DEVELOPMENT_TEAM = 3286TR25A4;
 				INFOPLIST_FILE = "$(SRCROOT)/Loggy/Loggy_iOS_Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -468,12 +610,49 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Loggy/Loggy.entitlements;
 				DEVELOPMENT_TEAM = 3286TR25A4;
 				INFOPLIST_FILE = "$(SRCROOT)/Loggy/Loggy_iOS_Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = se.nena.Loggy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D083A9C91EFD5CB100B8EA0D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CODE_SIGN_ENTITLEMENTS = LoggyTodayExtension/LoggyTodayExtension.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 3286TR25A4;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				INFOPLIST_FILE = "$(SRCROOT)/LoggyTodayExtension/LoggyToday_Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = se.nena.Loggy.LoggyTodayExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		D083A9CA1EFD5CB100B8EA0D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CODE_SIGN_ENTITLEMENTS = LoggyTodayExtension/LoggyTodayExtension.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 3286TR25A4;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				INFOPLIST_FILE = "$(SRCROOT)/LoggyTodayExtension/LoggyToday_Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = se.nena.Loggy.LoggyTodayExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -487,6 +666,7 @@
 				D011DED21EFC052100A80A77 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D05121F21EF867DA00E7D825 /* Build configuration list for PBXProject "Loggy" */ = {
 			isa = XCConfigurationList;
@@ -502,6 +682,15 @@
 			buildConfigurations = (
 				D051220A1EF867DB00E7D825 /* Debug */,
 				D051220B1EF867DB00E7D825 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D083A9C81EFD5CB100B8EA0D /* Build configuration list for PBXNativeTarget "LoggyTodayExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D083A9C91EFD5CB100B8EA0D /* Debug */,
+				D083A9CA1EFD5CB100B8EA0D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

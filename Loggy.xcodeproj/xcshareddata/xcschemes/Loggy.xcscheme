@@ -20,6 +20,20 @@
                ReferencedContainer = "container:Loggy.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D083A9BB1EFD5CB100B8EA0D"
+               BuildableName = "LoggyTodayExtension.appex"
+               BlueprintName = "LoggyTodayExtension"
+               ReferencedContainer = "container:Loggy.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
