@@ -68,61 +68,37 @@ class DashboardViewController: UIViewController {
       return fmt
     }()
     let gpx_path : URL
-    let gpx_filename : URL
-    var tracks : [GPSTracker.TrackPoint] = []
-    var waypoints : [GPSTracker.TrackPoint] = []
+    let gpx_filename : String
+    var gpx = GPXData()
     
     init() throws {
-      let name = "track-" + Logger.dateFormatter.string(from: Date()) + ".gpx"
+      gpx_filename = "track-" + Logger.dateFormatter.string(from: Date()) + ".gpx"
       let dir = URL(fileURLWithPath: NSTemporaryDirectory())
-      //  else { throw Failure.msg("Cannot create temporary path") }
-      let fn = URL(fileURLWithPath: name)
-      //  else { throw Failure.msg("Cannot create gpx file name") }
-      gpx_path = dir.appendingPathComponent(name)
-      gpx_filename = fn
+      gpx_path = dir.appendingPathComponent(gpx_filename)
     }
     
     func log_point(_ loc : GPSTracker.TrackPoint) {
-      tracks.append(loc)
+      gpx.tracks.append(loc)
     }
     
     func log_waypoint(_ pt : GPSTracker.TrackPoint) {
-      waypoints.append(pt)
+      gpx.waypoints.append(pt)
     }
     
     func finish() {
-      var str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-      str += "<gpx xmlns=\"http://www.topografix.com/GPX/1/0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\" version=\"1.0\" creator=\"se.nnea.loggy\">\n"
+      let str = gpx.to_string()
       
-      str += " <trk>\n"
-      str += "  <name>Track</name>\n"
-      str += "  <trkseg>\n"
-      for track in tracks {
-        let lat = track.location.coordinate.latitude
-        let lon = track.location.coordinate.longitude
-        str += " <trkpt lat=\"\(lat)\" lon=\"\(lon)\"></trkpt>\n"
-      }
-      str += "  </trkseg>\n"
-      str += " </trk>\n"
-      for waypoint in waypoints {
-        let lat = waypoint.location.coordinate.latitude
-        let lon = waypoint.location.coordinate.longitude
-        str += " <wpt lat=\"\(lat)\" lon=\"\(lon)\"></wpt>\n"
-      }
-      str += "</gpx>\n"
       try? str.write(to: gpx_path, atomically: true, encoding: .utf8)
       
       let fm = FileManager.default
       let cloud_dir = fm.url(forUbiquityContainerIdentifier: nil)
-      print(cloud_dir)
-      guard let cloud_path = cloud_dir?.appendingPathComponent("Documents").appendingPathComponent(gpx_filename.lastPathComponent)
+      guard let cloud_path = cloud_dir?.appendingPathComponent("Documents").appendingPathComponent(gpx_filename)
         else {
         print("Cannot create icloud path")
         return
       }
       
       print(cloud_path)
-      let fc = NSFileCoordinator()
       
       do {
         try fm.setUbiquitous(true, itemAt: gpx_path, destinationURL: cloud_path)
@@ -130,17 +106,6 @@ class DashboardViewController: UIViewController {
         print("Failed to move gpx file to icloud: \(err)")
         
       }
-      /*
-      var error : NSError?
-      fc.coordinate(writingItemAt: cloud_path, options: [.forReplacing], error: &error, byAccessor: { url in
-        print(url)
-        do {
-          try str.write(to: url, atomically: true, encoding: .utf8)
-        } catch let err {
-          print("Failed to write gpx file: \(err)")
-        }
-      })
- */
     }
   }
   
