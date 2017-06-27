@@ -24,14 +24,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OW4-EX-vxi">
-                                <rect key="frame" x="39" y="617" width="101" height="41"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="Waypoint"/>
-                                <connections>
-                                    <action selector="storeWaypointWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7kl-Up-AME"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="euw-7x-828">
                                 <rect key="frame" x="16" y="20" width="71" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -75,28 +67,28 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4h9-3I-s2O">
-                                <rect key="frame" x="310" y="562" width="51" height="31"/>
+                                <rect key="frame" x="310" y="551" width="51" height="31"/>
                                 <connections>
                                     <action selector="togglePowerSaveWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="Wh0-GX-BAl"/>
                                 </connections>
                             </switch>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Dy-kd-gIj">
-                                <rect key="frame" x="310" y="508" width="51" height="31"/>
+                                <rect key="frame" x="310" y="497" width="51" height="31"/>
                                 <connections>
                                     <action selector="toggleAutowaypointWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="Eiy-sj-ajk"/>
                                 </connections>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Power save" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nfK-ic-xqJ">
-                                <rect key="frame" x="184" y="567" width="118" height="21"/>
+                                <rect key="frame" x="184" y="556" width="118" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="3tL-as-gP8">
-                                <rect key="frame" x="16" y="141" width="343" height="320"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="3tL-as-gP8">
+                                <rect key="frame" x="16" y="139" width="343" height="309"/>
                             </mapView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Auto waypoints" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZQi-IQ-Q1a">
-                                <rect key="frame" x="184" y="513" width="118" height="21"/>
+                                <rect key="frame" x="184" y="502" width="118" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -107,29 +99,55 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vqx-Oo-8p6">
-                                <rect key="frame" x="310" y="622" width="51" height="31"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k15-Tf-keV">
+                                <rect key="frame" x="166" y="611" width="69" height="41"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="69" id="as3-m7-JiC"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Stop">
+                                    <color key="titleColor" red="0.68962166878172582" green="0.20264213333144207" blue="0.2155563458331515" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
-                                    <action selector="toggleTrackingWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="mh1-KJ-Gpu"/>
+                                    <action selector="stopTracking:" destination="BYZ-38-t0r" eventType="touchUpInside" id="k6d-tP-g9O"/>
                                 </connections>
-                            </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tracking:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Yo-yW-sJi">
-                                <rect key="frame" x="231" y="627" width="71" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TBt-4C-ZZg">
+                                <rect key="frame" x="276" y="617" width="83" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="83" id="DoM-lS-JkX"/>
+                                    <constraint firstAttribute="height" constant="30" id="DqD-rA-eVY"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Start">
+                                    <color key="titleColor" red="0.00095229610768554542" green="0.58232868020304573" blue="0.053342696968067461" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="startTracking:" destination="BYZ-38-t0r" eventType="touchUpInside" id="2Ul-3T-ZWj"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OW4-EX-vxi">
+                                <rect key="frame" x="26" y="611" width="101" height="41"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="Waypoint">
+                                    <color key="titleColor" red="0.0" green="0.15529658103214694" blue="0.84495954949238583" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="storeWaypointWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7kl-Up-AME"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Vqx-Oo-8p6" firstAttribute="leading" secondItem="9Yo-yW-sJi" secondAttribute="trailing" constant="8" id="07D-5V-Fxv"/>
                             <constraint firstItem="CKZ-Ey-mCE" firstAttribute="baseline" secondItem="euw-7x-828" secondAttribute="baseline" id="0MV-3J-qpz"/>
+                            <constraint firstItem="TBt-4C-ZZg" firstAttribute="trailing" secondItem="4h9-3I-s2O" secondAttribute="trailing" id="6mf-gV-HzX"/>
                             <constraint firstItem="ZQi-IQ-Q1a" firstAttribute="centerY" secondItem="2Dy-kd-gIj" secondAttribute="centerY" id="BBu-CU-fBr"/>
                             <constraint firstItem="3tL-as-gP8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="Bqu-6u-zIY"/>
                             <constraint firstItem="O9m-sd-ZGU" firstAttribute="firstBaseline" secondItem="euw-7x-828" secondAttribute="baseline" constant="24" id="Eoq-hk-BYQ"/>
                             <constraint firstItem="ZQi-IQ-Q1a" firstAttribute="leading" secondItem="nfK-ic-xqJ" secondAttribute="trailing" constant="-118" id="FrF-c7-jBn"/>
                             <constraint firstAttribute="trailing" secondItem="4h9-3I-s2O" secondAttribute="trailing" constant="16" id="Jhr-hm-kov"/>
                             <constraint firstItem="du1-sb-aFx" firstAttribute="baseline" secondItem="O9m-sd-ZGU" secondAttribute="baseline" id="KZH-FM-Xre"/>
+                            <constraint firstItem="TBt-4C-ZZg" firstAttribute="centerY" secondItem="OW4-EX-vxi" secondAttribute="centerY" id="Lw2-on-ncq"/>
                             <constraint firstItem="du1-sb-aFx" firstAttribute="width" secondItem="CKZ-Ey-mCE" secondAttribute="width" constant="-109.5" id="Mdh-bW-l9T"/>
                             <constraint firstItem="4h9-3I-s2O" firstAttribute="top" secondItem="2Dy-kd-gIj" secondAttribute="bottom" constant="23" id="OSg-db-VhD"/>
                             <constraint firstItem="bmO-Vp-Dws" firstAttribute="firstBaseline" secondItem="O9m-sd-ZGU" secondAttribute="baseline" constant="24" id="Ogx-VG-lJL"/>
@@ -142,10 +160,11 @@
                             <constraint firstItem="ZfC-Cu-Y9o" firstAttribute="baseline" secondItem="HM6-3h-3Ma" secondAttribute="baseline" id="VVj-MD-EqT"/>
                             <constraint firstItem="3UN-27-rMr" firstAttribute="leading" secondItem="du1-sb-aFx" secondAttribute="leading" id="Whm-ft-qnk"/>
                             <constraint firstItem="2Dy-kd-gIj" firstAttribute="top" secondItem="3tL-as-gP8" secondAttribute="bottom" constant="47" id="X2L-Hi-0NE"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="OW4-EX-vxi" secondAttribute="bottom" constant="15" id="bVJ-qe-yki"/>
                             <constraint firstItem="euw-7x-828" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="bvh-UD-r3T"/>
-                            <constraint firstItem="9Yo-yW-sJi" firstAttribute="centerY" secondItem="Vqx-Oo-8p6" secondAttribute="centerY" id="cJu-e5-2cA"/>
                             <constraint firstItem="CKZ-Ey-mCE" firstAttribute="leading" secondItem="euw-7x-828" secondAttribute="trailing" constant="10.5" id="dqW-O4-GvY"/>
                             <constraint firstItem="du1-sb-aFx" firstAttribute="trailing" secondItem="CKZ-Ey-mCE" secondAttribute="trailing" constant="-109.5" id="eLc-ab-CUK"/>
+                            <constraint firstItem="k15-Tf-keV" firstAttribute="leading" secondItem="OW4-EX-vxi" secondAttribute="trailing" constant="39" id="gIp-aP-kkv"/>
                             <constraint firstItem="HM6-3h-3Ma" firstAttribute="leading" secondItem="bmO-Vp-Dws" secondAttribute="leading" id="gsM-xz-PgB"/>
                             <constraint firstItem="HM6-3h-3Ma" firstAttribute="trailing" secondItem="euw-7x-828" secondAttribute="trailing" id="gza-xb-0hl"/>
                             <constraint firstItem="euw-7x-828" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="hfP-Q7-hjA"/>
@@ -155,16 +174,14 @@
                             <constraint firstAttribute="trailing" secondItem="3tL-as-gP8" secondAttribute="trailing" constant="16" id="kXF-o9-qP0"/>
                             <constraint firstItem="3tL-as-gP8" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="lhY-fT-Dwh"/>
                             <constraint firstItem="ZfC-Cu-Y9o" firstAttribute="width" secondItem="du1-sb-aFx" secondAttribute="width" id="nyC-Xx-rI5"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Vqx-Oo-8p6" secondAttribute="trailing" id="o5b-oy-DOd"/>
                             <constraint firstItem="nfK-ic-xqJ" firstAttribute="width" secondItem="ZQi-IQ-Q1a" secondAttribute="width" id="pAD-Ke-ph3"/>
-                            <constraint firstItem="Vqx-Oo-8p6" firstAttribute="top" secondItem="4h9-3I-s2O" secondAttribute="bottom" constant="29" id="qer-KS-Er9"/>
-                            <constraint firstItem="OW4-EX-vxi" firstAttribute="centerY" secondItem="9Yo-yW-sJi" secondAttribute="centerY" id="s0m-Za-7rg"/>
+                            <constraint firstItem="TBt-4C-ZZg" firstAttribute="top" secondItem="4h9-3I-s2O" secondAttribute="bottom" constant="35" id="rg2-Vb-1r0"/>
                             <constraint firstItem="3UN-27-rMr" firstAttribute="baseline" secondItem="bmO-Vp-Dws" secondAttribute="baseline" id="s7c-x3-HhT"/>
-                            <constraint firstItem="OW4-EX-vxi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="23" id="sQj-nj-sES"/>
+                            <constraint firstItem="OW4-EX-vxi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="10" id="sQj-nj-sES"/>
                             <constraint firstItem="bmO-Vp-Dws" firstAttribute="leading" secondItem="O9m-sd-ZGU" secondAttribute="leading" id="uDV-CU-GwX"/>
+                            <constraint firstItem="k15-Tf-keV" firstAttribute="baseline" secondItem="OW4-EX-vxi" secondAttribute="baseline" id="usP-K6-p5t"/>
                             <constraint firstItem="nfK-ic-xqJ" firstAttribute="centerY" secondItem="4h9-3I-s2O" secondAttribute="centerY" id="v8U-KM-K1g"/>
                             <constraint firstItem="3UN-27-rMr" firstAttribute="width" secondItem="du1-sb-aFx" secondAttribute="width" id="vOq-Jq-mv9"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Vqx-Oo-8p6" secondAttribute="bottom" constant="14" id="z9c-Bk-bxg"/>
                         </constraints>
                     </view>
                     <connections>
@@ -175,11 +192,12 @@
                         <outlet property="bearingValue" destination="ZfC-Cu-Y9o" id="Cwe-J9-gWB"/>
                         <outlet property="locationLabel" destination="euw-7x-828" id="JQ8-Ki-pUS"/>
                         <outlet property="locationValue" destination="CKZ-Ey-mCE" id="7XN-CZ-eB0"/>
-                        <outlet property="mapView" destination="3tL-as-gP8" id="Lrs-3p-NkI"/>
+                        <outlet property="mapView" destination="3tL-as-gP8" id="sng-N8-jWP"/>
                         <outlet property="powerSaveToggle" destination="4h9-3I-s2O" id="AQC-EN-HbO"/>
                         <outlet property="speedLabel" destination="bmO-Vp-Dws" id="u8y-Kg-yDP"/>
                         <outlet property="speedValue" destination="3UN-27-rMr" id="LjB-6g-9Jp"/>
-                        <outlet property="trackingToggle" destination="Vqx-Oo-8p6" id="FP5-Jb-qC4"/>
+                        <outlet property="startButton" destination="TBt-4C-ZZg" id="yZh-Vi-1hI"/>
+                        <outlet property="stopButton" destination="k15-Tf-keV" id="2iT-8H-4Ks"/>
                         <outlet property="waypointButton" destination="OW4-EX-vxi" id="a3W-19-9gd"/>
                     </connections>
                 </viewController>

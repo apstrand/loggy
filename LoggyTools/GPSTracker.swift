@@ -16,11 +16,27 @@ public class GPSTracker {
   }
   
   public typealias TrackLogger = (TrackPoint) -> Void
-  
+  public typealias StateMonitor = (Bool) -> Void
+
   var logger : TrackLogger?
   let loc_mgr : CLLocationManager
   var pendingTracking = false
   var loc_delegate : LocDelegate! = nil
+  var is_tracking = false
+  var state_callback : StateMonitor?
+  
+  struct Config {
+    var time_threshold : Double
+    var dist_threshold : Double
+    func isSignificant(_ pt1 : TrackPoint, _ pt2 : TrackPoint) -> Bool {
+      let time_diff = pt1.location.timestamp.timeIntervalSince(pt2.location.timestamp)
+      let dist_diff = pt1.location.distance(from: pt2.location)
+      return dist_diff > dist_threshold || time_diff > time_threshold
+    }
+  }
+  var config : Config = Config(time_threshold: 10, dist_threshold: 1)
+  var last_point : TrackPoint?
+  var last_minor_point : TrackPoint?
   
   public init() {
     loc_mgr = CLLocationManager()
@@ -28,13 +44,22 @@ public class GPSTracker {
     loc_mgr.delegate = delegate
     loc_delegate = delegate
   }
+
+  public func isTracking() -> Bool {
+    return is_tracking
+  }
+  
+  public func monitorState(callback : @escaping StateMonitor) {
+    self.state_callback = callback
+    self.state_callback?(is_tracking)
+  }
   
   func startPendingTracking() {
     if pendingTracking {
       loc_mgr.startUpdatingLocation()
+      is_tracking = true
+      self.state_callback?(is_tracking)
     }
-    
-    
   }
   
   public func setTrackLogger(_ logger : @escaping TrackLogger) {
@@ -61,10 +86,27 @@ public class GPSTracker {
   
   public func stop() {
     pendingTracking = false
+    loc_mgr.stopUpdatingLocation()
+    is_tracking = false
+    self.state_callback?(is_tracking)
   }
   
-  public func storeWaypoint() {
-    
+  public func storeWaypoint() -> TrackPoint? {
+    if let pt = last_minor_point {
+      return pt
+    } else {
+      return nil
+    }
+  }
+  
+  func handleNewLocation(_ tp : TrackPoint) {
+    last_minor_point = tp
+    if last_point == nil || config.isSignificant(last_point!, tp) {
+      if let logger = logger {
+        logger(tp)
+      }
+      last_point = tp
+    }
   }
   
   class LocDelegate : NSObject, CLLocationManagerDelegate {
@@ -74,16 +116,14 @@ public class GPSTracker {
     }
     func locationManager(_ : CLLocationManager, didUpdateLocations locs: [CLLocation]) {
 //      print("Tells the delegate that new location data is available: [\(locs)]")
-      if let logger = parent.logger {
-        for loc in locs {
-          let tp : TrackPoint = TrackPoint(location: loc)
-          logger(tp)
-        }
+      for loc in locs {
+        let tp : TrackPoint = TrackPoint(location: loc)
+        parent.handleNewLocation(tp)
       }
     }
     
-    func locationManager(_ : CLLocationManager, didFailWithError: Error) {
-      print("Tells the delegate that the location manager was unable to retrieve a location value.")
+    func locationManager(_ : CLLocationManager, didFailWithError error: Error) {
+      print("Tells the delegate that the location manager was unable to retrieve a location value.\n\(error)")
     }
     
     func locationManager(_ : CLLocationManager, didFinishDeferredUpdatesWithError: Error?) {

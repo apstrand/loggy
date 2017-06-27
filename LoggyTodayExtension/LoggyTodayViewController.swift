@@ -11,6 +11,10 @@ import NotificationCenter
 
 class LoggyTodayViewController: UIViewController, NCWidgetProviding {
   
+  @IBOutlet weak var info_row1: UILabel!
+  @IBOutlet weak var info_row2_1: UILabel!
+  @IBOutlet weak var info_row2_2: UILabel!
+  
   @IBAction func storeWaypoint(_ sender: UIButton) {
     print("[W] storeWaypoint")
     if let url = URL(string:"loggy://action?storeWaypoint") {
@@ -38,20 +42,22 @@ class LoggyTodayViewController: UIViewController, NCWidgetProviding {
     if let val = defaults?.bool(forKey: "tracking.enabled") {
       self.statusSwitch.isOn = val
     }
+    self.info_row1.text = defaults?.string(forKey: "info.row1")
+    self.info_row2_1.text = defaults?.string(forKey: "info.row2_1")
+    self.info_row2_2.text = defaults?.string(forKey: "info.row2_2")
     
 //    extensionContext?.widgetLargestAvailableDisplayMode = .expanded
   }
   
-  /*
+  
  func widgetActiveDisplayModeDidChange(_ activeDisplayMode: NCWidgetDisplayMode, withMaximumSize maxSize: CGSize) {
- let expanded = activeDisplayMode == .expanded
- preferredContentSize = expanded ? CGSize(width: maxSize.width, height: 200) : maxSize
- }
-   override func viewDidLayoutSubviews() {
-   super.viewDidLayoutSubviews()
-   updatePriceHistoryLineChart()
-   }
-   */
+    let expanded = activeDisplayMode == .expanded
+    preferredContentSize = expanded ? CGSize(width: maxSize.width, height: 200) : maxSize
+  }
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+  }
   
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
