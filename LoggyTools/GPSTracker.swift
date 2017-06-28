@@ -91,7 +91,7 @@ public class GPSTracker {
     self.state_callback?(is_tracking)
   }
   
-  public func storeWaypoint() -> TrackPoint? {
+  public func currentLocation() -> TrackPoint? {
     if let pt = last_minor_point {
       return pt
     } else {

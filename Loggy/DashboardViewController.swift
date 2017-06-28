@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import LoggyTools
+import Photos
 
 class DashboardViewController: UIViewController {
 
@@ -222,6 +223,64 @@ class DashboardViewController: UIViewController {
     
     self.mapDelegate = MapDelegate(self)
     self.mapView.delegate = self.mapDelegate
+    
+    self.photoObserver = PhotoObserver(self)
+    PHPhotoLibrary.shared().register(self.photoObserver!)
+    
+    fetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: nil)
+ 
+    print("collection \(fetchResult.count)")
+    fetchResult?.enumerateObjects( {
+      obj, ix, stop in
+//      print("item \(ix): \(obj)")
+      self.allPhotos.append(PHAsset.fetchAssets(in: obj, options: nil))
+    })
+  }
+  
+  var fetchResult : PHFetchResult<PHAssetCollection>!
+  var allPhotos: [PHFetchResult<PHAsset>] = []
+  var photoObserver : PHPhotoLibraryChangeObserver?
+  var alreadyProcessed : Set<String> = []
+  
+  class PhotoObserver : NSObject, PHPhotoLibraryChangeObserver {
+    let parent : DashboardViewController
+    init(_ p : DashboardViewController) {
+      parent = p
+    }
+    public func photoLibraryDidChange(_ changeInstance: PHChange) {
+//      print("Photo change \(changeInstance)")
+      
+      
+//      let changes = changeInstance.changeDetails(for: parent.fetchResult)
+//      print(" details: \(changes)")
+
+      var allNew : [PHAsset] = []
+      for ix in 0..<parent.allPhotos.count {
+        let obj = parent.allPhotos[ix]
+        if let changes = changeInstance.changeDetails(for: obj) {
+          allNew.append(contentsOf: changes.insertedObjects)
+          parent.allPhotos[ix] = changes.fetchResultAfterChanges
+        }
+      }
+      
+      DispatchQueue.main.sync {
+        for asset in allNew {
+          if !parent.alreadyProcessed.contains(asset.localIdentifier) {
+            print(" new: \(asset.localIdentifier)")
+            if parent.autoWaypointToggle.isOn {
+              if let location = asset.location, let date = asset.creationDate {
+                parent.storeWaypoint(location, date)
+              }
+            }
+            parent.alreadyProcessed.insert(asset.localIdentifier)
+          } else {
+            print(" old: \(asset.localIdentifier)")
+          }
+        }
+      }
+      
+    }
+
   }
   
   class MapDelegate : NSObject, MKMapViewDelegate {
@@ -231,7 +290,6 @@ class DashboardViewController: UIViewController {
     }
     public func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
       if overlay is MKPolyline {
-        // draw the track
         let polyLine = overlay
         let polyLineRenderer = MKPolylineRenderer(overlay: polyLine)
         polyLineRenderer.strokeColor = UIColor.black
@@ -341,10 +399,15 @@ class DashboardViewController: UIViewController {
   }
   
   @IBAction func storeWaypoint(sender: UIButton) {
-    if let pt = gps.storeWaypoint() {
-      let place = MKPlacemark.init(coordinate: pt.location.coordinate)
-      self.mapView.addAnnotation(place)
+    if let pt = gps.currentLocation() {
+      storeWaypoint(pt.location)
     }
+  }
+
+  func storeWaypoint(_ location: CLLocation, _ date: Date? = nil) {
+    print("Store waypoint [location \(location)] [date \(date)]")
+    let place = MKPlacemark.init(coordinate: location.coordinate)
+    self.mapView.addAnnotation(place)
   }
   
   @IBAction func toggleTracking(sender: UISwitch) {
