@@ -26,9 +26,7 @@ public struct GPXData {
       let lat = track.location.coordinate.latitude
       let lon = track.location.coordinate.longitude
       str += "   <trkpt lat=\"\(lat)\" lon=\"\(lon)\">"
-      if let timestamp = track.timestamp {
-        str += "\n    <time>" + timefmt(timestamp) + "</time>\n   "
-      }
+      addTrackPointMetadata(&str, track)
       str += "</trkpt>\n"
     }
     str += "  </trkseg>\n"
@@ -37,13 +35,25 @@ public struct GPXData {
       let lat = waypoint.location.coordinate.latitude
       let lon = waypoint.location.coordinate.longitude
       str += " <wpt lat=\"\(lat)\" lon=\"\(lon)\">"
-      if let timestamp = waypoint.timestamp {
-        str += "\n    <time>" + timefmt(timestamp) + "</time>\n   "
-      }
+      addTrackPointMetadata(&str, waypoint)
       str += "</wpt>\n"
     }
     str += "</gpx>\n"
     return str
+  }
+  
+  func addTrackPointMetadata(_ str: inout String, _ tp : TrackPoint) {
+    let len = str.count
+    if let name = tp.name {
+      str += "\n    <name>" + name + "</name>"
+    }
+    if let timestamp = tp.timestamp {
+      str += "\n    <time>" + timefmt(timestamp) + "</time>"
+    }
+    if len != str.count {
+      str += "\n   "
+    }
+    
   }
   
   static let dateFormatter = ISO8601DateFormatter()
