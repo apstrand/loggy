@@ -13,13 +13,6 @@ import Photos
 
 class DashboardViewController: UIViewController {
 
-  struct SettingNames {
-    static let PowerSave = "power_save"
-    static let AutoWaypoint = "auto_waypoint"
-    static let SpeedUnit = "speed_unit"
-    static let AltitudeUnit = "altitude_unit"
-  }
-
   enum Failure: Error {
     case msg(String)
   }
@@ -33,6 +26,7 @@ class DashboardViewController: UIViewController {
   @IBOutlet weak var speedValue: UILabel!
   @IBOutlet weak var bearingValue: UILabel!
   @IBOutlet weak var autoWaypointToggle: UISwitch!
+  @IBOutlet weak var alwaysAutoWaypointToggle: UISwitch!
   @IBOutlet weak var powerSaveToggle: UISwitch!
   @IBOutlet weak var waypointButton: UIButton!
   @IBOutlet weak var stopButton: UIButton!
@@ -41,126 +35,46 @@ class DashboardViewController: UIViewController {
   
   let gps : GPSTracker
   
-  struct Track {
-    var min_lat : CLLocationDegrees = Double.greatestFiniteMagnitude
-    var max_lat : CLLocationDegrees = -Double.greatestFiniteMagnitude
-    var min_lon : CLLocationDegrees = Double.greatestFiniteMagnitude
-    var max_lon : CLLocationDegrees = -Double.greatestFiniteMagnitude
-    
-    var coords : [CLLocationCoordinate2D] = []
-
-    mutating func add(_ coord : CLLocationCoordinate2D) {
-      min_lat = min(min_lat, coord.latitude)
-      max_lat = max(min_lat, coord.latitude)
-      min_lon = min(min_lon, coord.latitude)
-      max_lon = max(min_lon, coord.latitude)
-      coords.append(coord)
-    }
-    
-    func region() -> MKCoordinateRegion? {
-      var span : MKCoordinateSpan
-      if coords.count > 1 {
-        span = MKCoordinateSpan(latitudeDelta: 3*(max_lat - min_lat), longitudeDelta: 3*(max_lon - min_lon))
-      } else {
-        span = MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1)
-      }
-      if let last = coords.last {
-        let coordReg = MKCoordinateRegion(center: last, span: span)
-        return coordReg
-      } else {
-        return nil
-      }
-    }
-  }
   var map_track : Track?
   var last_poly : MKPolyline?
   
-  class TapHandler {
-    let callback : (UIView) -> Void
-    let view : UIView
-    init(_ view : UIView, _ cb: @escaping (UIView) -> Void) {
-      self.view = view
-      self.callback = cb
-      let tapGesture = UITapGestureRecognizer()
-      tapGesture.numberOfTapsRequired = 1
-      tapGesture.addTarget(self, action: #selector(TapHandler.tapDetected(target:)))
-      view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc func tapDetected(target: Any) {
-      callback(view)
-    }
-  }
-
-  var tapHandlers : [TapHandler] = []
+  var mapDelegate : MapDelegate?
+  
+  var speedUnit = SpeedUnit.M_S
+  var altitudeUnit = AltitudeUnit.Meter
+  
+  var photosObserver : CameraPhotosObserver!
+  var logger : FileLogger?
+  
+  var tapHandlers : [LabelTapHandler] = []
   required init?(coder aCoder: NSCoder) {
     gps = GPSTracker()
     super.init(coder: aCoder)
   }
   
-  class Logger {
-    static let dateFormatter : DateFormatter = {
-      let fmt = DateFormatter()
-      fmt.dateFormat = "yyyyMMdd_hhmmss"
-      return fmt
-    }()
-    let gpx_path : URL
-    let gpx_filename : String
-    var gpx = GPXData()
-    
-    init() throws {
-      gpx_filename = "track-" + Logger.dateFormatter.string(from: Date()) + ".gpx"
-      let dir = URL(fileURLWithPath: NSTemporaryDirectory())
-      gpx_path = dir.appendingPathComponent(gpx_filename)
-    }
-    
-    func log_point(_ loc : GPSTracker.TrackPoint) {
-      gpx.tracks.append(loc)
-    }
-    
-    func log_waypoint(_ pt : GPSTracker.TrackPoint) {
-      gpx.waypoints.append(pt)
-    }
-    
-    func finish() {
-      let str = gpx.to_string()
-      
-      try? str.write(to: gpx_path, atomically: true, encoding: .utf8)
-      
-      let fm = FileManager.default
-      let cloud_dir = fm.url(forUbiquityContainerIdentifier: nil)
-      guard let cloud_path = cloud_dir?.appendingPathComponent("Documents").appendingPathComponent(gpx_filename)
-        else {
-        print("Cannot create icloud path")
-        return
-      }
-      
-      print(cloud_path)
-      
-      do {
-        try fm.setUbiquitous(true, itemAt: gpx_path, destinationURL: cloud_path)
-      } catch let err {
-        print("Failed to move gpx file to icloud: \(err)")
-        
-      }
-    }
-  }
   
-  var logger : Logger?
+  func updateLocationInfo(_ pt: TrackPoint) {
+    self.locationValue.text = self.formatCoord(pt.location.coordinate)
+    self.altitudeValue.text = self.formatAltitude(pt.location.altitude)
+    self.speedValue.text = self.formatSpeed(pt.location.speed)
+    self.bearingValue.text = self.formatBearing(pt.location.course)
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
     tapHandlers.append(contentsOf: [
-      TapHandler(locationValue, { self.toggleUnit($0) }),
-      TapHandler(speedValue, { self.toggleUnit($0) }),
-      TapHandler(altitudeValue, { self.toggleUnit($0) }),
-      TapHandler(bearingValue, { self.toggleUnit($0) })
+      LabelTapHandler(locationValue, { self.toggleUnit($0) }),
+      LabelTapHandler(speedValue, { self.toggleUnit($0) }),
+      LabelTapHandler(altitudeValue, { self.toggleUnit($0) }),
+      LabelTapHandler(bearingValue, { self.toggleUnit($0) })
     ])
+    tapHandlers.removeAll()
     
     let defaults = UserDefaults.standard
     powerSaveToggle.isOn = defaults.bool(forKey: SettingNames.PowerSave)
     autoWaypointToggle.isOn = defaults.bool(forKey: SettingNames.AutoWaypoint)
+    alwaysAutoWaypointToggle.isOn = defaults.bool(forKey: SettingNames.AlwaysAutoWaypoint)
     if let alt_unit = defaults.string(forKey: SettingNames.AltitudeUnit) {
       altitudeUnit = AltitudeUnit.parse(alt_unit)
     }
@@ -171,10 +85,10 @@ class DashboardViewController: UIViewController {
     gps.monitorState { is_tracking in
       self.startButton.isEnabled = !is_tracking
       self.stopButton.isEnabled = is_tracking
-      self.waypointButton.isEnabled = is_tracking
-      self.startButton.alpha = !is_tracking ? 1.0 : 0.5
-      self.stopButton.alpha = is_tracking ? 1.0 : 0.5
-      self.waypointButton.alpha = is_tracking ? 1.0 : 0.5
+      self.waypointButton.isEnabled = self.alwaysAutoWaypointToggle.isOn || is_tracking
+      self.startButton.alpha = self.startButton.isEnabled ? 1.0 : 0.5
+      self.stopButton.alpha = self.stopButton.isEnabled ? 1.0 : 0.5
+      self.waypointButton.alpha = self.waypointButton.isEnabled ? 1.0 : 0.5
       
 
       if is_tracking {
@@ -191,10 +105,7 @@ class DashboardViewController: UIViewController {
     }
     gps.setTrackLogger{ pt in
       self.logger?.log_point(pt)
-      self.locationValue.text = self.formatCoord(pt.location.coordinate)
-      self.altitudeValue.text = self.formatAltitude(pt.location.altitude)
-      self.speedValue.text = self.formatSpeed(pt.location.speed)
-      self.bearingValue.text = self.formatBearing(pt.location.course)
+      self.updateLocationInfo(pt)
       
       self.mapView.setCenter(pt.location.coordinate, animated: true)
       
@@ -224,63 +135,15 @@ class DashboardViewController: UIViewController {
     self.mapDelegate = MapDelegate(self)
     self.mapView.delegate = self.mapDelegate
     
-    self.photoObserver = PhotoObserver(self)
-    PHPhotoLibrary.shared().register(self.photoObserver!)
-    
-    fetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: nil)
- 
-    print("collection \(fetchResult.count)")
-    fetchResult?.enumerateObjects( {
-      obj, ix, stop in
-//      print("item \(ix): \(obj)")
-      self.allPhotos.append(PHAsset.fetchAssets(in: obj, options: nil))
+    self.photosObserver = CameraPhotosObserver({ loc, date in
+      if self.autoWaypointToggle.isOn && (self.gps.isTracking() || self.alwaysAutoWaypointToggle.isOn) {
+        if let date = date {
+          self.storeWaypoint(TrackPoint(location:loc, timestamp:date))
+        } else {
+          print("No date in photo!")
+        }
+      }
     })
-  }
-  
-  var fetchResult : PHFetchResult<PHAssetCollection>!
-  var allPhotos: [PHFetchResult<PHAsset>] = []
-  var photoObserver : PHPhotoLibraryChangeObserver?
-  var alreadyProcessed : Set<String> = []
-  
-  class PhotoObserver : NSObject, PHPhotoLibraryChangeObserver {
-    let parent : DashboardViewController
-    init(_ p : DashboardViewController) {
-      parent = p
-    }
-    public func photoLibraryDidChange(_ changeInstance: PHChange) {
-//      print("Photo change \(changeInstance)")
-      
-      
-//      let changes = changeInstance.changeDetails(for: parent.fetchResult)
-//      print(" details: \(changes)")
-
-      var allNew : [PHAsset] = []
-      for ix in 0..<parent.allPhotos.count {
-        let obj = parent.allPhotos[ix]
-        if let changes = changeInstance.changeDetails(for: obj) {
-          allNew.append(contentsOf: changes.insertedObjects)
-          parent.allPhotos[ix] = changes.fetchResultAfterChanges
-        }
-      }
-      
-      DispatchQueue.main.sync {
-        for asset in allNew {
-          if !parent.alreadyProcessed.contains(asset.localIdentifier) {
-            print(" new: \(asset.localIdentifier)")
-            if parent.autoWaypointToggle.isOn {
-              if let location = asset.location, let date = asset.creationDate {
-                parent.storeWaypoint(location, date)
-              }
-            }
-            parent.alreadyProcessed.insert(asset.localIdentifier)
-          } else {
-            print(" old: \(asset.localIdentifier)")
-          }
-        }
-      }
-      
-    }
-
   }
   
   class MapDelegate : NSObject, MKMapViewDelegate {
@@ -301,69 +164,6 @@ class DashboardViewController: UIViewController {
     }
 
   }
-  var mapDelegate : MapDelegate?
-  
-  enum SpeedUnit : String {
-    case M_S = "m_per_s"
-    case KM_H = "km_per_h"
-    case M_H = "miles_per_h"
-    static func parse(_ str : String) -> SpeedUnit {
-      switch str {
-        case "m_per_s":
-          return .M_S
-        case "km_per_h":
-          return .KM_H
-        case "miles_per_h":
-          return .M_H
-        default:
-          return .M_S
-      }
-    }
-    func next() -> SpeedUnit {
-      switch self {
-      case .M_S:
-        return .KM_H
-      case .KM_H:
-        return .M_H
-      case .M_H:
-        return .M_S
-      }
-    }
-    func format(_ value : Double) -> String {
-      switch self {
-      case .M_S:
-        return String(format: "%.1f m/s", value)
-      case .KM_H:
-        return String(format: "%.1f km/h", value * 3600 / 1000)
-      case .M_H:
-        return String(format: "%.1f mph", value * 3600 / 1609.34)
-      }
-    }
-  }
-  enum AltitudeUnit : String {
-    case Meter = "m"
-    case Feet = "ft"
-    static func parse(_ str : String) -> AltitudeUnit {
-      switch str {
-        case "m":
-          return .Meter
-        case "ft":
-          return .Feet
-      default:
-        return .Meter
-      }
-    }
-    func next() -> AltitudeUnit {
-      switch self {
-        case .Meter:
-          return .Feet
-        case .Feet:
-          return .Meter
-      }
-    }
-  }
-  var speedUnit = SpeedUnit.M_S
-  var altitudeUnit = AltitudeUnit.Meter
   
   func toggleUnit(_ sender: UIView) {
     if sender == speedValue {
@@ -400,19 +200,22 @@ class DashboardViewController: UIViewController {
   
   @IBAction func storeWaypoint(sender: UIButton) {
     if let pt = gps.currentLocation() {
-      storeWaypoint(pt.location)
+      storeWaypoint(pt)
     }
   }
 
-  func storeWaypoint(_ location: CLLocation, _ date: Date? = nil) {
-    print("Store waypoint [location \(location)] [date \(date)]")
-    let place = MKPlacemark.init(coordinate: location.coordinate)
+  func storeWaypoint(_ pt : TrackPoint) {
+    if !gps.isTracking() {
+      self.updateLocationInfo(pt)
+    }
+    print("Store waypoint [location \(pt.location)] [date \(pt.timestamp)]")
+    let place = MKPlacemark.init(coordinate: pt.location.coordinate)
     self.mapView.addAnnotation(place)
   }
   
   @IBAction func toggleTracking(sender: UISwitch) {
     if sender.isOn {
-      try? logger = Logger()
+      try? logger = FileLogger()
       gps.start()
     } else {
       gps.stop()
@@ -424,7 +227,7 @@ class DashboardViewController: UIViewController {
     
     
   }
-
+  
   @IBAction func togglePowerSave(sender: UISwitch) {
     
   }

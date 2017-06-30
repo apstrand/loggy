@@ -24,6 +24,12 @@
 		D09B2DA51EFA329F005A29D8 /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = D09B2DA31EFA329F005A29D8 /* iTunesArtwork@2x */; };
 		D0C488D91EFE95DD00319808 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0C488D81EFE95DD00319808 /* MapKit.framework */; };
 		D0C488DA1EFE962700319808 /* LoggyTodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D083A9BF1EFD5CB100B8EA0D /* LoggyTodayViewController.swift */; };
+		D0C9B16F1F05F7EF000BC92D /* LabelTapHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B16E1F05F7EF000BC92D /* LabelTapHandler.swift */; };
+		D0C9B1721F05FB9B000BC92D /* TrackData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1711F05FB9B000BC92D /* TrackData.swift */; };
+		D0C9B1741F06005D000BC92D /* FileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1731F06005C000BC92D /* FileLogger.swift */; };
+		D0C9B1761F06077C000BC92D /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1751F06077C000BC92D /* Settings.swift */; };
+		D0C9B1781F0607C7000BC92D /* CameraPhotosObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1771F0607C7000BC92D /* CameraPhotosObserver.swift */; };
+		D0C9B17A1F060838000BC92D /* UnitHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1791F060837000BC92D /* UnitHandling.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +95,12 @@
 		D09B2DA31EFA329F005A29D8 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; name = "iTunesArtwork@2x"; path = "../assets/icon/iTunesArtwork@2x"; sourceTree = "<group>"; };
 		D0C488D71EFE95A400319808 /* LoggyTodayExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LoggyTodayExtension.entitlements; sourceTree = "<group>"; };
 		D0C488D81EFE95DD00319808 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		D0C9B16E1F05F7EF000BC92D /* LabelTapHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTapHandler.swift; sourceTree = "<group>"; };
+		D0C9B1711F05FB9B000BC92D /* TrackData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackData.swift; sourceTree = "<group>"; };
+		D0C9B1731F06005C000BC92D /* FileLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileLogger.swift; sourceTree = "<group>"; };
+		D0C9B1751F06077C000BC92D /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		D0C9B1771F0607C7000BC92D /* CameraPhotosObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPhotosObserver.swift; sourceTree = "<group>"; };
+		D0C9B1791F060837000BC92D /* UnitHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitHandling.swift; sourceTree = "<group>"; };
 		D0FE7A1F1EFC617800F44AAE /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		D0FE7A301EFC66AD00F44AAE /* Loggy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Loggy.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -124,10 +136,14 @@
 		D011DEC81EFC052100A80A77 /* LoggyTools */ = {
 			isa = PBXGroup;
 			children = (
+				D0C9B1701F05FB54000BC92D /* generic */,
+				D0C9B1731F06005C000BC92D /* FileLogger.swift */,
+				D0C9B1711F05FB9B000BC92D /* TrackData.swift */,
 				D051220C1EF8A31800E7D825 /* GPSTracker.swift */,
 				D0066E9F1EFF4B4C001225DD /* GPXData.swift */,
 				D011DEC91EFC052100A80A77 /* LoggyTools.h */,
 				D011DECA1EFC052100A80A77 /* LoggyTools_Info.plist */,
+				D0C9B1771F0607C7000BC92D /* CameraPhotosObserver.swift */,
 			);
 			path = LoggyTools;
 			sourceTree = "<group>";
@@ -164,6 +180,8 @@
 				D05122031EF867DB00E7D825 /* LaunchScreen.storyboard */,
 				D0FE7A301EFC66AD00F44AAE /* Loggy.entitlements */,
 				D05122061EF867DB00E7D825 /* Loggy_iOS_Info.plist */,
+				D0C9B1751F06077C000BC92D /* Settings.swift */,
+				D0C9B1791F060837000BC92D /* UnitHandling.swift */,
 			);
 			path = Loggy;
 			sourceTree = "<group>";
@@ -194,6 +212,14 @@
 				D09B2DA31EFA329F005A29D8 /* iTunesArtwork@2x */,
 			);
 			name = icon;
+			sourceTree = "<group>";
+		};
+		D0C9B1701F05FB54000BC92D /* generic */ = {
+			isa = PBXGroup;
+			children = (
+				D0C9B16E1F05F7EF000BC92D /* LabelTapHandler.swift */,
+			);
+			name = generic;
 			sourceTree = "<group>";
 		};
 		D0FE7A1E1EFC617800F44AAE /* Frameworks */ = {
@@ -373,7 +399,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				D011DED41EFC09CC00A80A77 /* GPSTracker.swift in Sources */,
+				D0C9B1721F05FB9B000BC92D /* TrackData.swift in Sources */,
 				D0066EA01EFF4B4C001225DD /* GPXData.swift in Sources */,
+				D0C9B1781F0607C7000BC92D /* CameraPhotosObserver.swift in Sources */,
+				D0C9B1741F06005D000BC92D /* FileLogger.swift in Sources */,
+				D0C9B16F1F05F7EF000BC92D /* LabelTapHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,7 +411,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0C9B1761F06077C000BC92D /* Settings.swift in Sources */,
 				D05121FD1EF867DB00E7D825 /* DashboardViewController.swift in Sources */,
+				D0C9B17A1F060838000BC92D /* UnitHandling.swift in Sources */,
 				D05121FB1EF867DB00E7D825 /* LoggyAppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

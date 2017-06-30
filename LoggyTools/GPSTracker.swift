@@ -11,10 +11,6 @@ import CoreLocation
 
 public class GPSTracker {
   
-  public struct TrackPoint {
-    public let location : CLLocation
-  }
-  
   public typealias TrackLogger = (TrackPoint) -> Void
   public typealias StateMonitor = (Bool) -> Void
 
@@ -117,7 +113,7 @@ public class GPSTracker {
     func locationManager(_ : CLLocationManager, didUpdateLocations locs: [CLLocation]) {
 //      print("Tells the delegate that new location data is available: [\(locs)]")
       for loc in locs {
-        let tp : TrackPoint = TrackPoint(location: loc)
+        let tp : TrackPoint = TrackPoint(location: loc, timestamp: loc.timestamp)
         parent.handleNewLocation(tp)
       }
     }
