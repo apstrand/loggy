@@ -43,14 +43,14 @@ public struct GPXData {
   }
   
   func addTrackPointMetadata(_ str: inout String, _ tp : TrackPoint) {
-    let len = str.count
+    let len = str.endIndex
     if let name = tp.name {
       str += "\n    <name>" + name + "</name>"
     }
     if let timestamp = tp.timestamp {
       str += "\n    <time>" + timefmt(timestamp) + "</time>"
     }
-    if len != str.count {
+    if len != str.endIndex {
       str += "\n   "
     }
     

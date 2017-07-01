@@ -5,8 +5,9 @@ import LoggyTools
 
 let gps = GPSTracker()
 
-gps.start()
+// gps.start()
+// gps.stop()
 
-gps.stop()
-
+// SettingName.A
+// AppUrl(.StartTracking)
 

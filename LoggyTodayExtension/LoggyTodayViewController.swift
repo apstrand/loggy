@@ -8,43 +8,59 @@
 
 import UIKit
 import NotificationCenter
+import LoggyTools
 
 class LoggyTodayViewController: UIViewController, NCWidgetProviding {
   
-  @IBOutlet weak var info_row1: UILabel!
-  @IBOutlet weak var info_row2_1: UILabel!
-  @IBOutlet weak var info_row2_2: UILabel!
+  @IBOutlet weak var lastUpdatedLabel: UILabel!
+  @IBOutlet weak var locationLabel: UILabel!
+  @IBOutlet weak var altitudeLabel: UILabel!
+  @IBOutlet weak var bearingLabel: UILabel!
+  @IBOutlet weak var speedLabel: UILabel!
   
-  @IBAction func storeWaypoint(_ sender: UIButton) {
+  @IBOutlet weak var waypointButton: UIButton!
+  @IBOutlet weak var stopButton: UIButton!
+  @IBOutlet weak var startButton: UIButton!
+  
+  @IBAction func waypointAction(_ sender: Any) {
     print("[W] storeWaypoint")
-    if let url = URL(string:"loggy://action?storeWaypoint") {
-      extensionContext?.open(url, completionHandler: nil)
-    }
+    extensionContext?.open(AppUrl.app(cmd:.StoreWaypoint), completionHandler: nil)
+  }
+
+  @IBAction func stopAction(_ sender: Any) {
+    print("[W] stopAction")
+    extensionContext?.open(AppUrl.app(cmd:.StopTracking), completionHandler: nil)
   }
   
-  @IBOutlet weak var statusSwitch: UISwitch!
-  
-  @IBAction func toggleStatus(_ sender: UISwitch) {
-    print("[W] toggleStatus: \(sender.isOn)")
-    guard let url = URL(string:"loggy://tracking?" + (sender.isOn ? "on" : "off")) else { return }
-    extensionContext?.open(url, completionHandler: nil)
+  @IBAction func startAction(_ sender: Any) {
+    print("[W] startAction")
+    extensionContext?.open(AppUrl.app(cmd:.StartTracking), completionHandler: nil)
   }
+  
   
   func appState() -> UserDefaults? {
-    let defaults = UserDefaults(suiteName: "group.se.nena.loggy")
+    let defaults = UserDefaults(suiteName: SettingName.Suite)
     return defaults
+  }
+  
+  func updateState(enabled : Bool) {
+    let setup : ((UIButton,Bool) -> Void) = { btn,state in
+      btn.isEnabled = state; btn.alpha = state ? 1.0 : 0.5
+    }
+    let defaults = appState()
+    setup(self.startButton, !enabled)
+    setup(self.stopButton, enabled)
+    setup(self.waypointButton, (defaults?.bool(forKey:SettingName.AlwaysAutoWaypoint) ?? false) ? true : enabled)
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+
     let defaults = appState()
-    if let val = defaults?.bool(forKey: "tracking.enabled") {
-      self.statusSwitch.isOn = val
+    if let val = defaults?.bool(forKey: SettingName.TrackingEnabled) {
+      updateState(enabled:val)
     }
-    self.info_row1.text = defaults?.string(forKey: "info.row1")
-    self.info_row2_1.text = defaults?.string(forKey: "info.row2_1")
-    self.info_row2_2.text = defaults?.string(forKey: "info.row2_2")
+    
     
 //    extensionContext?.widgetLargestAvailableDisplayMode = .expanded
   }
@@ -52,7 +68,7 @@ class LoggyTodayViewController: UIViewController, NCWidgetProviding {
   
  func widgetActiveDisplayModeDidChange(_ activeDisplayMode: NCWidgetDisplayMode, withMaximumSize maxSize: CGSize) {
     let expanded = activeDisplayMode == .expanded
-    preferredContentSize = expanded ? CGSize(width: maxSize.width, height: 200) : maxSize
+    preferredContentSize = expanded ? CGSize(width: maxSize.width, height: 500) : maxSize
   }
 
   override func viewDidLayoutSubviews() {
@@ -66,12 +82,16 @@ class LoggyTodayViewController: UIViewController, NCWidgetProviding {
   
   func widgetPerformUpdate(completionHandler: (@escaping (NCUpdateResult) -> Void)) {
     // Perform any setup necessary in order to update the view.
-    
-    // If an error is encountered, use NCUpdateResult.Failed
-    // If there's no update required, use NCUpdateResult.NoData
-    // If there's an update, use NCUpdateResult.NewData
-    
-    completionHandler(NCUpdateResult.newData)
+
+    let defaults = appState()
+    if let val = defaults?.bool(forKey: SettingName.TrackingEnabled) {
+      if val != stopButton.isEnabled {
+        updateState(enabled:val)
+        completionHandler(.newData)
+      }
+    }
+
+    completionHandler(NCUpdateResult.noData)
   }
     
 }
