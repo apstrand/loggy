@@ -8,11 +8,11 @@
 
 import Foundation
 
-enum SpeedUnit : String {
+public enum SpeedUnit : String {
   case M_S = "m_per_s"
   case KM_H = "km_per_h"
   case M_H = "miles_per_h"
-  static func parse(_ str : String) -> SpeedUnit {
+  public static func parse(_ str : String) -> SpeedUnit {
     switch str {
     case "m_per_s":
       return .M_S
@@ -24,7 +24,7 @@ enum SpeedUnit : String {
       return .M_S
     }
   }
-  func next() -> SpeedUnit {
+  public func next() -> SpeedUnit {
     switch self {
     case .M_S:
       return .KM_H
@@ -34,7 +34,7 @@ enum SpeedUnit : String {
       return .M_S
     }
   }
-  func format(_ value : Double) -> String {
+  public func format(_ value : Double) -> String {
     switch self {
     case .M_S:
       return String(format: "%.1f m/s", value)
@@ -45,10 +45,11 @@ enum SpeedUnit : String {
     }
   }
 }
-enum AltitudeUnit : String {
+
+public enum AltitudeUnit : String {
   case Meter = "m"
   case Feet = "ft"
-  static func parse(_ str : String) -> AltitudeUnit {
+  public static func parse(_ str : String) -> AltitudeUnit {
     switch str {
     case "m":
       return .Meter
@@ -58,7 +59,7 @@ enum AltitudeUnit : String {
       return .Meter
     }
   }
-  func next() -> AltitudeUnit {
+  public func next() -> AltitudeUnit {
     switch self {
     case .Meter:
       return .Feet

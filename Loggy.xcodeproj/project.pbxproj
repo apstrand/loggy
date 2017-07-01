@@ -17,6 +17,9 @@
 		D05122001EF867DB00E7D825 /* LoggyMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */; };
 		D05122021EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D05122011EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets */; };
 		D05122051EF867DB00E7D825 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05122031EF867DB00E7D825 /* LaunchScreen.storyboard */; };
+		D06096B11F07EEDA002158DB /* LoggyTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D011DEC71EFC052100A80A77 /* LoggyTools.framework */; };
+		D06096B21F07F1AF002158DB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1751F06077C000BC92D /* Constants.swift */; };
+		D06096B31F07F1F7002158DB /* UnitHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1791F060837000BC92D /* UnitHandling.swift */; };
 		D083A9BD1EFD5CB100B8EA0D /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0FE7A1F1EFC617800F44AAE /* NotificationCenter.framework */; };
 		D083A9C31EFD5CB100B8EA0D /* LoggyTodayInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D083A9C11EFD5CB100B8EA0D /* LoggyTodayInterface.storyboard */; };
 		D083A9C71EFD5CB100B8EA0D /* LoggyTodayExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D083A9BC1EFD5CB100B8EA0D /* LoggyTodayExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -27,13 +30,18 @@
 		D0C9B16F1F05F7EF000BC92D /* LabelTapHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B16E1F05F7EF000BC92D /* LabelTapHandler.swift */; };
 		D0C9B1721F05FB9B000BC92D /* TrackData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1711F05FB9B000BC92D /* TrackData.swift */; };
 		D0C9B1741F06005D000BC92D /* FileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1731F06005C000BC92D /* FileLogger.swift */; };
-		D0C9B1761F06077C000BC92D /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1751F06077C000BC92D /* Settings.swift */; };
 		D0C9B1781F0607C7000BC92D /* CameraPhotosObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1771F0607C7000BC92D /* CameraPhotosObserver.swift */; };
-		D0C9B17A1F060838000BC92D /* UnitHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1791F060837000BC92D /* UnitHandling.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		D011DECC1EFC052100A80A77 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D05121EF1EF867DA00E7D825 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D011DEC61EFC052100A80A77;
+			remoteInfo = LoggyTools;
+		};
+		D06096AF1F07EED7002158DB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D05121EF1EF867DA00E7D825 /* Project object */;
 			proxyType = 1;
@@ -98,7 +106,7 @@
 		D0C9B16E1F05F7EF000BC92D /* LabelTapHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTapHandler.swift; sourceTree = "<group>"; };
 		D0C9B1711F05FB9B000BC92D /* TrackData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackData.swift; sourceTree = "<group>"; };
 		D0C9B1731F06005C000BC92D /* FileLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileLogger.swift; sourceTree = "<group>"; };
-		D0C9B1751F06077C000BC92D /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		D0C9B1751F06077C000BC92D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D0C9B1771F0607C7000BC92D /* CameraPhotosObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPhotosObserver.swift; sourceTree = "<group>"; };
 		D0C9B1791F060837000BC92D /* UnitHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitHandling.swift; sourceTree = "<group>"; };
 		D0FE7A1F1EFC617800F44AAE /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
@@ -126,6 +134,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D06096B11F07EEDA002158DB /* LoggyTools.framework in Frameworks */,
 				D083A9BD1EFD5CB100B8EA0D /* NotificationCenter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -137,13 +146,15 @@
 			isa = PBXGroup;
 			children = (
 				D0C9B1701F05FB54000BC92D /* generic */,
+				D0C9B1771F0607C7000BC92D /* CameraPhotosObserver.swift */,
+				D0C9B1751F06077C000BC92D /* Constants.swift */,
 				D0C9B1731F06005C000BC92D /* FileLogger.swift */,
-				D0C9B1711F05FB9B000BC92D /* TrackData.swift */,
 				D051220C1EF8A31800E7D825 /* GPSTracker.swift */,
 				D0066E9F1EFF4B4C001225DD /* GPXData.swift */,
+				D0C9B1711F05FB9B000BC92D /* TrackData.swift */,
+				D0C9B1791F060837000BC92D /* UnitHandling.swift */,
 				D011DEC91EFC052100A80A77 /* LoggyTools.h */,
 				D011DECA1EFC052100A80A77 /* LoggyTools_Info.plist */,
-				D0C9B1771F0607C7000BC92D /* CameraPhotosObserver.swift */,
 			);
 			path = LoggyTools;
 			sourceTree = "<group>";
@@ -152,8 +163,8 @@
 			isa = PBXGroup;
 			children = (
 				D05121F91EF867DB00E7D825 /* Loggy */,
-				D011DEC81EFC052100A80A77 /* LoggyTools */,
 				D083A9BE1EFD5CB100B8EA0D /* LoggyTodayExtension */,
+				D011DEC81EFC052100A80A77 /* LoggyTools */,
 				D0FE7A1E1EFC617800F44AAE /* Frameworks */,
 				D05121F81EF867DB00E7D825 /* Products */,
 			);
@@ -180,8 +191,6 @@
 				D05122031EF867DB00E7D825 /* LaunchScreen.storyboard */,
 				D0FE7A301EFC66AD00F44AAE /* Loggy.entitlements */,
 				D05122061EF867DB00E7D825 /* Loggy_iOS_Info.plist */,
-				D0C9B1751F06077C000BC92D /* Settings.swift */,
-				D0C9B1791F060837000BC92D /* UnitHandling.swift */,
 			);
 			path = Loggy;
 			sourceTree = "<group>";
@@ -295,6 +304,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				D06096B01F07EED7002158DB /* PBXTargetDependency */,
 			);
 			name = LoggyTodayExtension;
 			productName = LoggyTodayExtension;
@@ -400,8 +410,10 @@
 			files = (
 				D011DED41EFC09CC00A80A77 /* GPSTracker.swift in Sources */,
 				D0C9B1721F05FB9B000BC92D /* TrackData.swift in Sources */,
+				D06096B31F07F1F7002158DB /* UnitHandling.swift in Sources */,
 				D0066EA01EFF4B4C001225DD /* GPXData.swift in Sources */,
 				D0C9B1781F0607C7000BC92D /* CameraPhotosObserver.swift in Sources */,
+				D06096B21F07F1AF002158DB /* Constants.swift in Sources */,
 				D0C9B1741F06005D000BC92D /* FileLogger.swift in Sources */,
 				D0C9B16F1F05F7EF000BC92D /* LabelTapHandler.swift in Sources */,
 			);
@@ -411,9 +423,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0C9B1761F06077C000BC92D /* Settings.swift in Sources */,
 				D05121FD1EF867DB00E7D825 /* DashboardViewController.swift in Sources */,
-				D0C9B17A1F060838000BC92D /* UnitHandling.swift in Sources */,
 				D05121FB1EF867DB00E7D825 /* LoggyAppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -433,6 +443,11 @@
 			isa = PBXTargetDependency;
 			target = D011DEC61EFC052100A80A77 /* LoggyTools */;
 			targetProxy = D011DECC1EFC052100A80A77 /* PBXContainerItemProxy */;
+		};
+		D06096B01F07EED7002158DB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D011DEC61EFC052100A80A77 /* LoggyTools */;
+			targetProxy = D06096AF1F07EED7002158DB /* PBXContainerItemProxy */;
 		};
 		D083A9C61EFD5CB100B8EA0D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

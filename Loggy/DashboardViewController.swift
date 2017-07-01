@@ -72,13 +72,13 @@ class DashboardViewController: UIViewController {
     tapHandlers.removeAll()
     
     let defaults = UserDefaults.standard
-    powerSaveToggle.isOn = defaults.bool(forKey: SettingNames.PowerSave)
-    autoWaypointToggle.isOn = defaults.bool(forKey: SettingNames.AutoWaypoint)
-    alwaysAutoWaypointToggle.isOn = defaults.bool(forKey: SettingNames.AlwaysAutoWaypoint)
-    if let alt_unit = defaults.string(forKey: SettingNames.AltitudeUnit) {
+    powerSaveToggle.isOn = defaults.bool(forKey: SettingName.PowerSave)
+    autoWaypointToggle.isOn = defaults.bool(forKey: SettingName.AutoWaypoint)
+    alwaysAutoWaypointToggle.isOn = defaults.bool(forKey: SettingName.AlwaysAutoWaypoint)
+    if let alt_unit = defaults.string(forKey: SettingName.AltitudeUnit) {
       altitudeUnit = AltitudeUnit.parse(alt_unit)
     }
-    if let speed_unit = defaults.string(forKey: SettingNames.SpeedUnit) {
+    if let speed_unit = defaults.string(forKey: SettingName.SpeedUnit) {
       speedUnit = SpeedUnit.parse(speed_unit)
     }
     
@@ -160,7 +160,7 @@ class DashboardViewController: UIViewController {
         
         return polyLineRenderer
       }
-      assert(false)
+      fatalError("apa")
     }
 
   }
@@ -168,11 +168,11 @@ class DashboardViewController: UIViewController {
   func toggleUnit(_ sender: UIView) {
     if sender == speedValue {
       speedUnit = speedUnit.next()
-      UserDefaults.standard.set(speedUnit.rawValue, forKey:SettingNames.SpeedUnit)
+      UserDefaults.standard.set(speedUnit.rawValue, forKey:SettingName.SpeedUnit)
     }
     else if sender == altitudeValue {
       altitudeUnit = altitudeUnit.next()
-      UserDefaults.standard.setValue(altitudeUnit.rawValue, forKey: SettingNames.AltitudeUnit)
+      UserDefaults.standard.setValue(altitudeUnit.rawValue, forKey: SettingName.AltitudeUnit)
     }
   }
   
