@@ -25,7 +25,7 @@ public class FileLogger {
   }
   
   public func log_point(_ loc : TrackPoint) {
-    gpx.tracks.append(loc)
+    gpx.withCurrentTrack({ ts in ts.append(loc) })
   }
   
   public func log_waypoint(_ pt : TrackPoint) {

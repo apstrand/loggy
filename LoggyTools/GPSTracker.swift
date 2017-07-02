@@ -10,7 +10,7 @@ import Foundation
 import CoreLocation
 
 public class GPSTracker {
-  
+
   public typealias TrackLogger = (TrackPoint) -> Void
   public typealias StateMonitor = (Bool) -> Void
 
@@ -22,15 +22,18 @@ public class GPSTracker {
   var state_callback : StateMonitor?
   
   struct Config {
-    var time_threshold : Double
-    var dist_threshold : Double
-    func isSignificant(_ pt1 : TrackPoint, _ pt2 : TrackPoint) -> Bool {
-      let time_diff = pt1.location.timestamp.timeIntervalSince(pt2.location.timestamp)
-      let dist_diff = pt1.location.distance(from: pt2.location)
-      return dist_diff > dist_threshold || time_diff > time_threshold
+    var timeThreshold: Double
+    var distThreshold: Double
+    func isSignificant(_ pt1: TrackPoint, _ pt2: TrackPoint) -> Bool {
+      var time_diff = Double.greatestFiniteMagnitude
+      if let tm1 = pt1.timestamp, let tm2 = pt2.timestamp {
+        time_diff = tm1.timeIntervalSince(tm2)
+      }
+      let dist_diff = GPSTracker.greatCircleDist(pt1.location, pt2.location)
+      return dist_diff > distThreshold || time_diff > timeThreshold
     }
   }
-  var config : Config = Config(time_threshold: 10, dist_threshold: 1)
+  var config : Config = Config(timeThreshold: 10, distThreshold: 1)
   var last_point : TrackPoint?
   var last_minor_point : TrackPoint?
   
@@ -113,7 +116,7 @@ public class GPSTracker {
     func locationManager(_ : CLLocationManager, didUpdateLocations locs: [CLLocation]) {
 //      print("Tells the delegate that new location data is available: [\(locs)]")
       for loc in locs {
-        let tp : TrackPoint = TrackPoint(location: loc, timestamp: loc.timestamp)
+        let tp : TrackPoint = TrackPoint(location: loc.coordinate, timestamp: loc.timestamp)
         parent.handleNewLocation(tp)
       }
     }
@@ -188,5 +191,20 @@ public class GPSTracker {
     
   }
   
+  
+  public static func greatCircleDist(_ loc1: CLLocationCoordinate2D, _ loc2: CLLocationCoordinate2D) -> Double {
+    // Equirectangular approximation
+    // see: http://www.movable-type.co.uk/scripts/latlong.html
+    let lat1 = loc1.latitude
+    let lon1 = loc1.longitude
+    let lat2 = loc2.latitude
+    let lon2 = loc2.longitude
+    let R = 6371000.0
+    
+    let x = (lon2-lon1) * cos((lat1+lat2)/2);
+    let y = (lat2-lat1);
+    let d = sqrt(x*x + y*y) * R;
+    return d
+  }
 }
 

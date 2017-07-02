@@ -35,7 +35,7 @@ class DashboardViewController: UIViewController {
   
   let gps : GPSTracker
   
-  var map_track : Track?
+  var map_track = TrackHistory()
   var last_poly : MKPolyline?
   
   var mapDelegate : MapDelegate?
@@ -54,10 +54,16 @@ class DashboardViewController: UIViewController {
   
   
   func updateLocationInfo(_ pt: TrackPoint) {
-    self.locationValue.text = self.formatCoord(pt.location.coordinate)
-    self.altitudeValue.text = self.formatAltitude(pt.location.altitude)
-    self.speedValue.text = self.formatSpeed(pt.location.speed)
-    self.bearingValue.text = self.formatBearing(pt.location.course)
+    self.locationValue.text = self.formatCoord(pt.location)
+    if let ele = pt.elevation {
+      self.altitudeValue.text = self.formatAltitude(ele)
+    }
+    if let speed = pt.speed {
+      self.speedValue.text = self.formatSpeed(speed)
+    }
+    if let bearing = pt.bearing {
+      self.bearingValue.text = self.formatBearing(bearing)
+    }
   }
   
   override func viewDidLoad() {
@@ -107,26 +113,22 @@ class DashboardViewController: UIViewController {
       self.logger?.log_point(pt)
       self.updateLocationInfo(pt)
       
-      self.mapView.setCenter(pt.location.coordinate, animated: true)
+      self.mapView.setCenter(pt.location, animated: true)
       
-      if self.map_track == nil {
-        return
-      }
+      self.map_track.add(pt.location)
       
-      self.map_track!.add(pt.location.coordinate)
-      
-      if let region = self.map_track!.region() {
+      if let region = self.map_track.region() {
         self.mapView.setRegion(region, animated: true)
       }
     
-      if self.map_track!.coords.count == 1 {
-        let place = MKPlacemark.init(coordinate: pt.location.coordinate)
+      if self.map_track.gpx.tracks.last!.segments.last!.track.count == 1 {
+        let place = MKPlacemark.init(coordinate: pt.location)
         self.mapView.addAnnotation(place)
       }
       if let poly = self.last_poly {
           self.mapView.remove(poly)
       }
-      self.last_poly = MKPolyline(coordinates: &self.map_track!.coords, count: self.map_track!.coords.count)
+      self.last_poly = MKPolyline(coordinates: &self.map_track.coordCache, count: self.map_track.coordCache.count)
       self.mapView.add(self.last_poly!)
     }
     
@@ -138,7 +140,7 @@ class DashboardViewController: UIViewController {
     self.photosObserver = CameraPhotosObserver({ loc, date in
       if self.autoWaypointToggle.isOn && (self.gps.isTracking() || self.alwaysAutoWaypointToggle.isOn) {
         if let date = date {
-          self.storeWaypoint(TrackPoint(location:loc, timestamp:date))
+          self.storeWaypoint(TrackPoint(location:loc.coordinate, timestamp:date))
         } else {
           print("No date in photo!")
         }
@@ -190,12 +192,11 @@ class DashboardViewController: UIViewController {
   }
   
   @IBAction func startTracking(_ sender: Any) {
-    map_track = Track()
+    map_track.startNewTrack()
     gps.start()
   }
   @IBAction func stopTracking(_ sender: Any) {
     gps.stop()
-    map_track = nil
   }
   
   @IBAction func storeWaypoint(sender: UIButton) {
@@ -209,7 +210,7 @@ class DashboardViewController: UIViewController {
       self.updateLocationInfo(pt)
     }
     print("Store waypoint [location \(pt.location)] [date \(pt.timestamp)]")
-    let place = MKPlacemark.init(coordinate: pt.location.coordinate)
+    let place = MKPlacemark.init(coordinate: pt.location)
     self.mapView.addAnnotation(place)
   }
   
