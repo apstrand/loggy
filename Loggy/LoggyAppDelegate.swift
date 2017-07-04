@@ -13,9 +13,30 @@ class LoggyAppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
 
+  var appState = AppState()
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-    // Override point for customization after application launch.
+    
+    if let vc = window?.rootViewController {
+      if let tab = vc as? UITabBarController {
+        if let vcs = tab.viewControllers {
+          for vc in vcs {
+            if let vc = vc as? DashboardViewController {
+              vc.settings = appState
+              vc.gpxController = appState
+            }
+            if let vc = vc as? TrackViewController {
+              vc.gpxController = appState
+            }
+            if let vc = vc as? SettingsViewController {
+              vc.settings = appState
+            }
+            
+          }
+        }
+      }
+    }
+
     return true
   }
 

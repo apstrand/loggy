@@ -25,35 +25,62 @@ class DashboardViewController: UIViewController {
   @IBOutlet weak var altitudeValue: UILabel!
   @IBOutlet weak var speedValue: UILabel!
   @IBOutlet weak var bearingValue: UILabel!
-  @IBOutlet weak var autoWaypointToggle: UISwitch!
-  @IBOutlet weak var alwaysAutoWaypointToggle: UISwitch!
-  @IBOutlet weak var powerSaveToggle: UISwitch!
   @IBOutlet weak var waypointButton: UIButton!
   @IBOutlet weak var stopButton: UIButton!
   @IBOutlet weak var startButton: UIButton!
   @IBOutlet weak var mapView: MKMapView!
   
-  let gps : GPSTracker
+  var infoValueLabels : [UILabel] = []
   
-  var map_track = TrackHistory()
-  var last_poly : MKPolyline?
+  var settings: SettingsRW!
+  var gpxController: GPXBacking!
   
-  var mapDelegate : MapDelegate?
+  let gps: GPSTracker
+  var isTracking: Bool {
+    get {
+      return settings.isSet(SettingName.TrackingEnabled)
+    }
+  }
+  
+  var mapTrack: TrackHistory!
+  var trackPolys: [MKPolyline] = []
+  var currentPoly: MKPolyline? = nil
+  
+  var mapDelegate: MapDelegate?
   
   var speedUnit = SpeedUnit.M_S
   var altitudeUnit = AltitudeUnit.Meter
   
-  var photosObserver : CameraPhotosObserver!
-  var logger : FileLogger?
+  var photosObserver: CameraPhotosObserver!
+  
+  var regs = TokenRegs()
   
   var tapHandlers : [LabelTapHandler] = []
   required init?(coder aCoder: NSCoder) {
     gps = GPSTracker()
     super.init(coder: aCoder)
   }
+
+  class LoggyAnnotation: NSObject, MKAnnotation {
+    public var coordinate: CLLocationCoordinate2D
+    public init(coordinate: CLLocationCoordinate2D) {
+      self.coordinate = coordinate
+    }
+  }
+  class WaypointAnnotation: LoggyAnnotation {
+    static let identifier = "waypoint"
+  }
   
+  class TrackAnnotation: LoggyAnnotation {
+    static let identifier = "track"
+    let isStart: Bool
+    public init(coordinate: CLLocationCoordinate2D, isStart: Bool) {
+      self.isStart = isStart
+      super.init(coordinate: coordinate)
+    }
+  }
   
-  func updateLocationInfo(_ pt: TrackPoint) {
+  func updateLocationInfo(_ pt: TrackPoint, color: UIColor = UIColor.black) {
     self.locationValue.text = self.formatCoord(pt.location)
     if let ele = pt.elevation {
       self.altitudeValue.text = self.formatAltitude(ele)
@@ -64,10 +91,18 @@ class DashboardViewController: UIViewController {
     if let bearing = pt.bearing {
       self.bearingValue.text = self.formatBearing(bearing)
     }
+    for label in infoValueLabels {
+      label.textColor = color
+    }
+    
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    infoValueLabels = [ locationValue, altitudeValue, speedValue, bearingValue ]
+
+    mapTrack = TrackHistory(gpx: gpxController.gpxData())
     
     tapHandlers.append(contentsOf: [
       LabelTapHandler(locationValue, { self.toggleUnit($0) }),
@@ -77,68 +112,72 @@ class DashboardViewController: UIViewController {
     ])
     tapHandlers.removeAll()
     
-    let defaults = UserDefaults.standard
-    powerSaveToggle.isOn = defaults.bool(forKey: SettingName.PowerSave)
-    autoWaypointToggle.isOn = defaults.bool(forKey: SettingName.AutoWaypoint)
-    alwaysAutoWaypointToggle.isOn = defaults.bool(forKey: SettingName.AlwaysAutoWaypoint)
-    if let alt_unit = defaults.string(forKey: SettingName.AltitudeUnit) {
+    if let alt_unit = settings.value(forKey: SettingName.AltitudeUnit) {
       altitudeUnit = AltitudeUnit.parse(alt_unit)
     }
-    if let speed_unit = defaults.string(forKey: SettingName.SpeedUnit) {
+    if let speed_unit = settings.value(forKey: SettingName.SpeedUnit) {
       speedUnit = SpeedUnit.parse(speed_unit)
     }
     
-    gps.monitorState { is_tracking in
-      self.startButton.isEnabled = !is_tracking
-      self.stopButton.isEnabled = is_tracking
-      self.waypointButton.isEnabled = self.alwaysAutoWaypointToggle.isOn || is_tracking
-      self.startButton.alpha = self.startButton.isEnabled ? 1.0 : 0.5
-      self.stopButton.alpha = self.stopButton.isEnabled ? 1.0 : 0.5
-      self.waypointButton.alpha = self.waypointButton.isEnabled ? 1.0 : 0.5
+    regs += settings.observe(key: SettingName.PowerSave, onChange: { value in
+      self.updateGpsState(isTracking: self.isTracking, powerSave: (value == "true"))
+    })
+    regs += settings.observe(key: SettingName.TrackingEnabled) { value in
+      if value == "true" {
+          self.locationValue.text = ""
+          self.altitudeValue.text = ""
+          self.speedValue.text = ""
+          self.bearingValue.text = ""
+        } else {
+          self.locationValue.text = "- -"
+          self.altitudeValue.text = "- -"
+          self.speedValue.text = "- -"
+          self.bearingValue.text = "- -"
+        }
       
-
-      if is_tracking {
-        self.locationValue.text = ""
-        self.altitudeValue.text = ""
-        self.speedValue.text = ""
-        self.bearingValue.text = ""
-      } else {
-        self.locationValue.text = "- -"
-        self.altitudeValue.text = "- -"
-        self.speedValue.text = "- -"
-        self.bearingValue.text = "- -"
-      }
+      self.updateInterfaceState(isTracking: value == "true")
     }
-    gps.setTrackLogger{ pt in
-      self.logger?.log_point(pt)
-      self.updateLocationInfo(pt)
+    
+    updateGpsState(isTracking: isTracking,
+                   powerSave: settings.isSet(SettingName.PowerSave))
+
+    gps.setTrackLogger{ pt, isMajor in
+
+      if isMajor {
+        self.updateLocationInfo(pt)
+      }
       
       self.mapView.setCenter(pt.location, animated: true)
+
+      if self.isTracking && isMajor {
+        self.mapTrack.add(pt.location)
       
-      self.map_track.add(pt.location)
-      
-      if let region = self.map_track.region() {
-        self.mapView.setRegion(region, animated: true)
-      }
+        if let region = self.mapTrack.region() {
+          self.mapView.setRegion(region, animated: true)
+        }
     
-      if self.map_track.gpx.tracks.last!.segments.last!.track.count == 1 {
-        let place = MKPlacemark.init(coordinate: pt.location)
-        self.mapView.addAnnotation(place)
-      }
-      if let poly = self.last_poly {
+        if self.mapTrack.gpx.tracks.last!.segments.last!.track.count == 1 {
+          let ann = TrackAnnotation(coordinate: pt.location, isStart: true)
+          self.mapView.addAnnotation(ann)
+        }
+        let newPoly = MKPolyline(coordinates: &self.mapTrack.coordCache, count: self.mapTrack.coordCache.count)
+        if let poly = self.currentPoly {
           self.mapView.remove(poly)
+        } else {
+          self.trackPolys.append(newPoly)
+        }
+        self.mapView.add(newPoly)
+        self.currentPoly = newPoly
       }
-      self.last_poly = MKPolyline(coordinates: &self.map_track.coordCache, count: self.map_track.coordCache.count)
-      self.mapView.add(self.last_poly!)
     }
-    
-    self.mapView.showsUserLocation = true
     
     self.mapDelegate = MapDelegate(self)
     self.mapView.delegate = self.mapDelegate
     
     self.photosObserver = CameraPhotosObserver({ loc, date in
-      if self.autoWaypointToggle.isOn && (self.gps.isTracking() || self.alwaysAutoWaypointToggle.isOn) {
+      if self.settings.isSet(SettingName.AutoWaypoint) &&
+        (self.isTracking ||
+          self.settings.isSet(SettingName.AlwaysAutoWaypoint)) {
         if let date = date {
           self.storeWaypoint(TrackPoint(location:loc.coordinate, timestamp:date))
         } else {
@@ -146,6 +185,26 @@ class DashboardViewController: UIViewController {
         }
       }
     })
+  }
+  
+  func updateInterfaceState(isTracking: Bool) {
+    self.startButton.isEnabled = !isTracking
+    self.stopButton.isEnabled = isTracking
+    
+    let alwaysAutoWaypoint = settings.isSet(SettingName.AlwaysAutoWaypoint)
+
+    self.waypointButton.isEnabled = alwaysAutoWaypoint || isTracking
+    self.startButton.alpha = self.startButton.isEnabled ? 1.0 : 0.5
+    self.stopButton.alpha = self.stopButton.isEnabled ? 1.0 : 0.5
+    self.waypointButton.alpha = self.waypointButton.isEnabled ? 1.0 : 0.5
+  }
+  
+  func updateGpsState(isTracking: Bool, powerSave: Bool) {
+    if !powerSave || isTracking {
+      gps.start()
+    } else {
+      gps.stop()
+    }
   }
   
   class MapDelegate : NSObject, MKMapViewDelegate {
@@ -162,19 +221,49 @@ class DashboardViewController: UIViewController {
         
         return polyLineRenderer
       }
-      fatalError("apa")
+      fatalError("mapView: Unknown overlay")
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+      if let _ = annotation as? WaypointAnnotation {
+        var pin: MKPinAnnotationView!
+        if let view = mapView.dequeueReusableAnnotationView(withIdentifier: WaypointAnnotation.identifier) {
+          pin = view as! MKPinAnnotationView
+          pin.annotation = annotation
+        } else {
+          pin = MKPinAnnotationView.init(annotation: annotation, reuseIdentifier: WaypointAnnotation.identifier)
+        }
+        pin.pinTintColor = UIColor.blue
+        return pin
+      }
+      if let track = annotation as? TrackAnnotation {
+        var pin: MKPinAnnotationView!
+        if let view = mapView.dequeueReusableAnnotationView(withIdentifier: TrackAnnotation.identifier) {
+          pin = view as! MKPinAnnotationView
+          pin.annotation = annotation
+        } else {
+          pin = MKPinAnnotationView.init(annotation: annotation, reuseIdentifier: TrackAnnotation.identifier)
+        }
+        pin.pinTintColor = track.isStart ? UIColor.green : UIColor.red
+        return pin
+      }
+      return nil
     }
 
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+//      print("mapView changed: \(mapView.visibleMapRect)")
+    }
   }
   
   func toggleUnit(_ sender: UIView) {
     if sender == speedValue {
       speedUnit = speedUnit.next()
-      UserDefaults.standard.set(speedUnit.rawValue, forKey:SettingName.SpeedUnit)
+      settings.update(value: speedUnit.rawValue, forKey:SettingName.SpeedUnit)
     }
     else if sender == altitudeValue {
       altitudeUnit = altitudeUnit.next()
-      UserDefaults.standard.setValue(altitudeUnit.rawValue, forKey: SettingName.AltitudeUnit)
+      settings.update(value: altitudeUnit.rawValue, forKey: SettingName.AltitudeUnit)
     }
   }
   
@@ -192,11 +281,17 @@ class DashboardViewController: UIViewController {
   }
   
   @IBAction func startTracking(_ sender: Any) {
-    map_track.startNewTrack()
-    gps.start()
+    mapTrack.startNewSegment()
+    self.currentPoly = nil
+    settings.update(value: "true", forKey:SettingName.TrackingEnabled)
   }
   @IBAction func stopTracking(_ sender: Any) {
-    gps.stop()
+    settings.update(value: "false", forKey:SettingName.TrackingEnabled)
+    if let pt = gps.currentLocation() {
+      let place = TrackAnnotation(coordinate: pt.location, isStart: false)
+      self.mapView.addAnnotation(place)
+    }
+
   }
   
   @IBAction func storeWaypoint(sender: UIButton) {
@@ -206,32 +301,12 @@ class DashboardViewController: UIViewController {
   }
 
   func storeWaypoint(_ pt : TrackPoint) {
-    if !gps.isTracking() {
-      self.updateLocationInfo(pt)
-    }
+    self.updateLocationInfo(pt, color: UIColor.blue)
     print("Store waypoint [location \(pt.location)] [date \(pt.timestamp)]")
-    let place = MKPlacemark.init(coordinate: pt.location)
-    self.mapView.addAnnotation(place)
+    let ann = WaypointAnnotation(coordinate: pt.location)
+    self.mapView.addAnnotation(ann)
   }
   
-  @IBAction func toggleTracking(sender: UISwitch) {
-    if sender.isOn {
-      try? logger = FileLogger()
-      gps.start()
-    } else {
-      gps.stop()
-      logger?.finish()
-    }
-  }
-  
-  @IBAction func toggleAutowaypoint(sender: UISwitch) {
-    
-    
-  }
-  
-  @IBAction func togglePowerSave(sender: UISwitch) {
-    
-  }
   
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()

@@ -27,11 +27,14 @@
 		D06096B31F07F1F7002158DB /* UnitHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1791F060837000BC92D /* UnitHandling.swift */; };
 		D083A9BD1EFD5CB100B8EA0D /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0FE7A1F1EFC617800F44AAE /* NotificationCenter.framework */; };
 		D083A9C31EFD5CB100B8EA0D /* LoggyTodayInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D083A9C11EFD5CB100B8EA0D /* LoggyTodayInterface.storyboard */; };
-		D083A9C71EFD5CB100B8EA0D /* LoggyTodayExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D083A9BC1EFD5CB100B8EA0D /* LoggyTodayExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D09B2DA41EFA329F005A29D8 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = D09B2DA21EFA329F005A29D8 /* iTunesArtwork */; };
 		D09B2DA51EFA329F005A29D8 /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = D09B2DA31EFA329F005A29D8 /* iTunesArtwork@2x */; };
 		D0C488D91EFE95DD00319808 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0C488D81EFE95DD00319808 /* MapKit.framework */; };
 		D0C488DA1EFE962700319808 /* LoggyTodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D083A9BF1EFD5CB100B8EA0D /* LoggyTodayViewController.swift */; };
+		D0C951031F0948A3005E08D7 /* TrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C951021F0948A3005E08D7 /* TrackViewController.swift */; };
+		D0C951051F094D29005E08D7 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C951041F094D29005E08D7 /* SettingsViewController.swift */; };
+		D0C951071F098D50005E08D7 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C951061F098D50005E08D7 /* AppState.swift */; };
+		D0C951091F09F681005E08D7 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C951081F09F681005E08D7 /* Settings.swift */; };
 		D0C9B16F1F05F7EF000BC92D /* LabelTapHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B16E1F05F7EF000BC92D /* LabelTapHandler.swift */; };
 		D0C9B1721F05FB9B000BC92D /* TrackTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1711F05FB9B000BC92D /* TrackTools.swift */; };
 		D0C9B1741F06005D000BC92D /* FileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1731F06005C000BC92D /* FileLogger.swift */; };
@@ -53,13 +56,6 @@
 			remoteGlobalIDString = D011DEC61EFC052100A80A77;
 			remoteInfo = LoggyTools;
 		};
-		D083A9C51EFD5CB100B8EA0D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D05121EF1EF867DA00E7D825 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D083A9BB1EFD5CB100B8EA0D;
-			remoteInfo = LoggyTodayExtension;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -72,17 +68,6 @@
 				D011DECF1EFC052100A80A77 /* LoggyTools.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D0FE7A2E1EFC617800F44AAE /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				D083A9C71EFD5CB100B8EA0D /* LoggyTodayExtension.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -112,6 +97,10 @@
 		D09B2DA31EFA329F005A29D8 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; name = "iTunesArtwork@2x"; path = "../assets/icon/iTunesArtwork@2x"; sourceTree = "<group>"; };
 		D0C488D71EFE95A400319808 /* LoggyTodayExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LoggyTodayExtension.entitlements; sourceTree = "<group>"; };
 		D0C488D81EFE95DD00319808 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		D0C951021F0948A3005E08D7 /* TrackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackViewController.swift; sourceTree = "<group>"; };
+		D0C951041F094D29005E08D7 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		D0C951061F098D50005E08D7 /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		D0C951081F09F681005E08D7 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		D0C9B16E1F05F7EF000BC92D /* LabelTapHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTapHandler.swift; sourceTree = "<group>"; };
 		D0C9B1711F05FB9B000BC92D /* TrackTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTools.swift; sourceTree = "<group>"; };
 		D0C9B1731F06005C000BC92D /* FileLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileLogger.swift; sourceTree = "<group>"; };
@@ -202,8 +191,11 @@
 			isa = PBXGroup;
 			children = (
 				D09B2DA01EFA3287005A29D8 /* assets */,
-				D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */,
+				D0C951061F098D50005E08D7 /* AppState.swift */,
 				D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */,
+				D0C951021F0948A3005E08D7 /* TrackViewController.swift */,
+				D0C951041F094D29005E08D7 /* SettingsViewController.swift */,
+				D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */,
 				D05122011EF867DB00E7D825 /* Loggy_iOS_Assets.xcassets */,
 				D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */,
 				D05122031EF867DB00E7D825 /* LaunchScreen.storyboard */,
@@ -263,6 +255,7 @@
 			isa = PBXGroup;
 			children = (
 				D0C9B16E1F05F7EF000BC92D /* LabelTapHandler.swift */,
+				D0C951081F09F681005E08D7 /* Settings.swift */,
 			);
 			name = generic;
 			sourceTree = "<group>";
@@ -298,6 +291,7 @@
 				D011DEC31EFC052100A80A77 /* Frameworks */,
 				D011DEC41EFC052100A80A77 /* Headers */,
 				D011DEC51EFC052100A80A77 /* Resources */,
+				D05DE33A1F087251007748D1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -316,13 +310,12 @@
 				D05121F41EF867DA00E7D825 /* Frameworks */,
 				D05121F51EF867DA00E7D825 /* Resources */,
 				D011DED31EFC052100A80A77 /* Embed Frameworks */,
-				D0FE7A2E1EFC617800F44AAE /* Embed App Extensions */,
+				D05DE33B1F087281007748D1 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				D011DECD1EFC052100A80A77 /* PBXTargetDependency */,
-				D083A9C61EFD5CB100B8EA0D /* PBXTargetDependency */,
 			);
 			name = Loggy;
 			productName = Loggy;
@@ -353,6 +346,7 @@
 				D083A9B81EFD5CB100B8EA0D /* Sources */,
 				D083A9B91EFD5CB100B8EA0D /* Frameworks */,
 				D083A9BA1EFD5CB100B8EA0D /* Resources */,
+				D05DE33C1F087289007748D1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -469,6 +463,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		D05DE33A1F087251007748D1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# swiftlint\n# tailor\n";
+		};
+		D05DE33B1F087281007748D1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# swiftlint\n# tailor\n";
+		};
+		D05DE33C1F087289007748D1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# swiftlint\n# tailor\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		D011DEC21EFC052100A80A77 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -480,6 +516,7 @@
 				D0066EA01EFF4B4C001225DD /* GPXData.swift in Sources */,
 				D0C9B1781F0607C7000BC92D /* CameraPhotosObserver.swift in Sources */,
 				D06096B21F07F1AF002158DB /* Constants.swift in Sources */,
+				D0C951091F09F681005E08D7 /* Settings.swift in Sources */,
 				D0C9B1741F06005D000BC92D /* FileLogger.swift in Sources */,
 				D0C9B16F1F05F7EF000BC92D /* LabelTapHandler.swift in Sources */,
 			);
@@ -490,7 +527,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				D05121FD1EF867DB00E7D825 /* DashboardViewController.swift in Sources */,
+				D0C951071F098D50005E08D7 /* AppState.swift in Sources */,
+				D0C951031F0948A3005E08D7 /* TrackViewController.swift in Sources */,
 				D05121FB1EF867DB00E7D825 /* LoggyAppDelegate.swift in Sources */,
+				D0C951051F094D29005E08D7 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -525,11 +565,6 @@
 			isa = PBXTargetDependency;
 			target = D011DEC61EFC052100A80A77 /* LoggyTools */;
 			targetProxy = D06096AF1F07EED7002158DB /* PBXContainerItemProxy */;
-		};
-		D083A9C61EFD5CB100B8EA0D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D083A9BB1EFD5CB100B8EA0D /* LoggyTodayExtension */;
-			targetProxy = D083A9C51EFD5CB100B8EA0D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -857,6 +892,7 @@
 				D05DE3321F082812007748D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D083A9C81EFD5CB100B8EA0D /* Build configuration list for PBXNativeTarget "LoggyTodayExtension" */ = {
 			isa = XCConfigurationList;

@@ -11,14 +11,14 @@ import CoreLocation
 
 public class GPSTracker {
 
-  public typealias TrackLogger = (TrackPoint) -> Void
+  public typealias TrackLogger = (TrackPoint, Bool) -> Void
   public typealias StateMonitor = (Bool) -> Void
 
   var logger : TrackLogger?
   let loc_mgr : CLLocationManager
   var pendingTracking = false
   var loc_delegate : LocDelegate! = nil
-  var is_tracking = false
+  private var is_tracking = false
   var state_callback : StateMonitor?
   
   struct Config {
@@ -44,10 +44,6 @@ public class GPSTracker {
     loc_delegate = delegate
   }
 
-  public func isTracking() -> Bool {
-    return is_tracking
-  }
-  
   public func monitorState(callback : @escaping StateMonitor) {
     self.state_callback = callback
     self.state_callback?(is_tracking)
@@ -100,12 +96,11 @@ public class GPSTracker {
   
   func handleNewLocation(_ tp : TrackPoint) {
     last_minor_point = tp
-    if last_point == nil || config.isSignificant(last_point!, tp) {
-      if let logger = logger {
-        logger(tp)
-      }
-      last_point = tp
+    let significant = last_point == nil || config.isSignificant(last_point!, tp)
+    if let logger = logger {
+      logger(tp, significant)
     }
+    last_point = tp
   }
   
   class LocDelegate : NSObject, CLLocationManagerDelegate {

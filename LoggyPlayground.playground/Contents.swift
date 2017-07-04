@@ -3,11 +3,17 @@
 import UIKit
 import LoggyTools
 
-let gps = GPSTracker()
+// let gps = GPSTracker()
 
 // gps.start()
 // gps.stop()
 
-// SettingName.A
-// AppUrl(.StartTracking)
 
+let settings = SettingsImpl()
+
+do {
+  var token = settings.observe(key: "key", onChange: { print("value \($0)") })
+
+  settings.update(value: "key", forKey: "meh")
+
+}

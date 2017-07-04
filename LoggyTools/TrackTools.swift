@@ -12,21 +12,32 @@ import CoreLocation
 
 public struct TrackHistory {
   
-  var min_lat : CLLocationDegrees = Double.greatestFiniteMagnitude
-  var max_lat : CLLocationDegrees = -Double.greatestFiniteMagnitude
-  var min_lon : CLLocationDegrees = Double.greatestFiniteMagnitude
-  var max_lon : CLLocationDegrees = -Double.greatestFiniteMagnitude
+  let MinLatSpan: CLLocationDegrees = 0.02
+  let MinLonSpan: CLLocationDegrees = 0.02
   
-  public var gpx = GPXData()
+  var min_lat: CLLocationDegrees = 0
+  var max_lat: CLLocationDegrees = 0
+  var min_lon: CLLocationDegrees = 0
+  var max_lon: CLLocationDegrees = 0
+  
+  public var gpx: GPXData
   public var coordCache: [CLLocationCoordinate2D] = []
   
-  public init() {
-    
+  public init(gpx: GPXData) {
+    self.gpx = gpx
   }
   
-  public mutating func startNewTrack() {
+  public mutating func startNewSegment() {
     coordCache.removeAll()
-    gpx.tracks.append(GPXData.Track())
+    min_lat = Double.greatestFiniteMagnitude
+    max_lat = -Double.greatestFiniteMagnitude
+    min_lon = Double.greatestFiniteMagnitude
+    max_lon = -Double.greatestFiniteMagnitude
+
+    if gpx.tracks.count == 0 {
+      gpx.tracks.append(GPXData.Track())
+    }
+    gpx.tracks.last!.segments.append(GPXData.TrackSeg())
   }
 
   public mutating func add(_ coord : CLLocationCoordinate2D) {
@@ -35,8 +46,7 @@ public struct TrackHistory {
     min_lon = min(min_lon, coord.longitude)
     max_lon = max(min_lon, coord.longitude)
 
-    var coords = gpx.tracks.last?.segments.last?.track
-    coords?.append(TrackPoint(location:coord))
+    gpx.tracks.last!.segments.last!.track.append(TrackPoint(location:coord))
     coordCache.append(coord)
   }
   
@@ -44,9 +54,9 @@ public struct TrackHistory {
     var span : MKCoordinateSpan
     let coords = gpx.withCurrentTrack({ return $0 })
     if coords.count > 1 {
-      span = MKCoordinateSpan(latitudeDelta: 3*(max_lat - min_lat), longitudeDelta: 3*(max_lon - min_lon))
+      span = MKCoordinateSpan(latitudeDelta: max(MinLatSpan, 3*(max_lat - min_lat)), longitudeDelta: max(MinLonSpan, 3*(max_lon - min_lon)))
     } else {
-      span = MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1)
+      span = MKCoordinateSpan(latitudeDelta: MinLatSpan, longitudeDelta: MinLonSpan)
     }
     if let last = coords.last {
       let coordReg = MKCoordinateRegion(center: last.location, span: span)
