@@ -11,12 +11,12 @@ import CoreLocation
 
 public struct TrackPoint {
   public let location : CLLocationCoordinate2D
-  public let timestamp : Date?
+  public let timestamp : Date
   public let elevation : Double?
   public let speed : Double?
   public let bearing : Double?
   public let name : String?
-  public init(location: CLLocationCoordinate2D, timestamp: Date? = nil,
+  public init(location: CLLocationCoordinate2D, timestamp: Date,
               name: String? = nil, elevation: Double? = nil,
               speed: Double? = nil, bearing: Double? = nil)
   {
@@ -29,24 +29,49 @@ public struct TrackPoint {
   }
 }
 
+public protocol GPXDelegate {
+  func waypointUpdate(waypoint: GPXData.Waypoint)
+  func segmentUpdate(segment: GPXData.TrackSeg)
+  func trackUpdate(track: GPXData.Track)
+}
+
 public class GPXData {
   
   // see http://www.topografix.com/gpx.asp
   public class TrackSeg {
-    public var name : String?
-    public var track : [TrackPoint] = []
+    public var id: Int = 0
+    public var name: String?
+    public var track: [TrackPoint] = []
   }
   public class Track {
-    public var name : String?
-    public var segments : [TrackSeg] = []
+    public var id: Int = 0
+    public var name: String?
+    public var segments: [TrackSeg] = []
   }
-  public var tracks : [Track] = []
-  public var waypoints : [TrackPoint] = []
+  public class Waypoint {
+    public var id: Int
+    public var point: TrackPoint
+    public init(point: TrackPoint, id: Int) {
+      self.point = point
+      self.id = id
+    }
+  }
+  private var nextId = 1
+  public var tracks: [Track] = []
+  public var waypoints: [Waypoint] = []
+  
+  public func genId() -> Int {
+    nextId += 1
+    return nextId
+  }
   
   public init() { }
   
-  public init(contentsOf url: URL) {
-    parse(contentsOf: url)
+  
+  public func assign(from other: GPXData) {
+    self.tracks = other.tracks
+    self.waypoints = other.waypoints
+    self.nextId = other.nextId
   }
 
   public func withCurrentTrack<T>(_ fn: ((inout [TrackPoint]) -> T)) -> T {
@@ -55,7 +80,7 @@ public class GPXData {
   
   public func to_string() -> String {
     var str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-    str += "<gpx xmlns=\"http://www.topografix.com/GPX/1/0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\" version=\"1.0\" creator=\"se.nnea.loggy\">\n"
+    str += "<gpx xmlns=\"http://www.topografix.com/GPX/1/0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd\" version=\"1.0\" creator=\"se.nena.loggy\">\n"
     
     for track in tracks {
       str += " <trk>\n"
@@ -76,31 +101,31 @@ public class GPXData {
     str += " </trk>\n"
     }
     for waypoint in waypoints {
-      let lat = waypoint.location.latitude
-      let lon = waypoint.location.longitude
+      let lat = waypoint.point.location.latitude
+      let lon = waypoint.point.location.longitude
       str += " <wpt lat=\"\(lat)\" lon=\"\(lon)\">"
-      addTrackPointMetadata(&str, waypoint)
+      addTrackPointMetadata(&str, waypoint.point)
       str += "</wpt>\n"
     }
     str += "</gpx>\n"
     return str
   }
   
-  func parse(contentsOf url: URL, appending: Bool = true) {
-    if appending {
-      tracks.removeAll()
-      waypoints.removeAll()
-    }
+  public static func parse(contentsOf url: URL) -> GPXData? {
+    
+    let inst = GPXData()
 
     do {
       let data = try Data(contentsOf: url)
       let parser = XMLParser(data: data)
-      let delegate = ParserDelegate(self)
+      let delegate = ParserDelegate(inst)
       parser.delegate = delegate
 
       parser.parse()
+      return inst
     } catch let err {
       print("Parse error: \(err)")
+      return nil
     }
   }
 
@@ -160,7 +185,7 @@ public class GPXData {
         break
       case "wpt":
         if let loc = last_location {
-          gpx.waypoints.append(TrackPoint(location: loc, timestamp: last_time, name: name_stack.removeLast(), elevation: last_ele, speed: last_speed, bearing: last_course))
+          gpx.waypoints.append(Waypoint(point: TrackPoint(location: loc, timestamp: last_time!, name: name_stack.removeLast(), elevation: last_ele, speed: last_speed, bearing: last_course), id: gpx.genId()))
           last_ele = nil
           last_time = nil
           last_speed = nil
@@ -175,7 +200,7 @@ public class GPXData {
         break
       case "trkpt":
         if let loc = last_location {
-          gpx.tracks.last?.segments.last?.track.append(TrackPoint(location: loc, timestamp: last_time, name: name_stack.removeLast(), elevation: last_ele, speed: last_speed, bearing: last_course))
+          gpx.tracks.last?.segments.last?.track.append(TrackPoint(location: loc, timestamp: last_time!, name: name_stack.removeLast(), elevation: last_ele, speed: last_speed, bearing: last_course))
           last_ele = nil
           last_time = nil
           last_speed = nil
@@ -218,12 +243,9 @@ public class GPXData {
   }
   
   func addTrackPointMetadata(_ str: inout String, _ tp : TrackPoint) {
-    let len = str.endIndex
+    str += "\n    <time>" + timefmt(tp.timestamp) + "</time>"
     if let name = tp.name {
       str += "\n    <name>" + name + "</name>"
-    }
-    if let timestamp = tp.timestamp {
-      str += "\n    <time>" + timefmt(timestamp) + "</time>"
     }
     if let ele = tp.elevation {
       str += "\n    <ele>\(ele)</ele>"
@@ -234,10 +256,6 @@ public class GPXData {
     if let bearing = tp.bearing {
       str += "\n    <course>\(bearing)</course>"
     }
-    if len != str.endIndex {
-      str += "\n   "
-    }
-    
   }
   
   static let dateFormatter = ISO8601DateFormatter()

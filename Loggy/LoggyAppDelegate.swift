@@ -14,7 +14,7 @@ class LoggyAppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
 
   var appState = AppState()
-
+  
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     
     if let vc = window?.rootViewController {
@@ -24,9 +24,11 @@ class LoggyAppDelegate: UIResponder, UIApplicationDelegate {
             if let vc = vc as? DashboardViewController {
               vc.settings = appState
               vc.gpxController = appState
+              vc.units = appState
             }
             if let vc = vc as? TrackViewController {
               vc.gpxController = appState
+              vc.units = appState
             }
             if let vc = vc as? SettingsViewController {
               vc.settings = appState
@@ -36,6 +38,7 @@ class LoggyAppDelegate: UIResponder, UIApplicationDelegate {
         }
       }
     }
+    appState.didFinishLaunching()
 
     return true
   }
@@ -54,6 +57,7 @@ class LoggyAppDelegate: UIResponder, UIApplicationDelegate {
   func applicationDidEnterBackground(_ application: UIApplication) {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    appState.didEnterBackground()
   }
 
   func applicationWillEnterForeground(_ application: UIApplication) {

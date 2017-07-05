@@ -10,8 +10,28 @@ import Foundation
 import MapKit
 import CoreLocation
 
-public struct TrackHistory {
+public class MapTracks {
   
+  public class LoggyAnnotation: NSObject, MKAnnotation {
+    public var coordinate: CLLocationCoordinate2D
+    public init(coordinate: CLLocationCoordinate2D) {
+      self.coordinate = coordinate
+    }
+  }
+  
+  public class WaypointAnnotation: LoggyAnnotation {
+    static let identifier = "waypoint"
+  }
+  
+  public class TrackAnnotation: LoggyAnnotation {
+    static let identifier = "track"
+    let isStart: Bool
+    public init(coordinate: CLLocationCoordinate2D, isStart: Bool) {
+      self.isStart = isStart
+      super.init(coordinate: coordinate)
+    }
+  }
+
   let MinLatSpan: CLLocationDegrees = 0.02
   let MinLonSpan: CLLocationDegrees = 0.02
   
@@ -19,15 +39,55 @@ public struct TrackHistory {
   var max_lat: CLLocationDegrees = 0
   var min_lon: CLLocationDegrees = 0
   var max_lon: CLLocationDegrees = 0
+
+  var trackPolys: [MKPolyline] = []
+  var currentPoly: MKPolyline? = nil
+  
+  var mapView: MKMapView
+  var mapDelegate: MapDelegate?
   
   public var gpx: GPXData
+  private var gps: GPSTracker
   public var coordCache: [CLLocationCoordinate2D] = []
+  public var isTracking: Bool = false
   
-  public init(gpx: GPXData) {
+  public init(_ mapView: MKMapView, _ gpx: GPXData, _ gps: GPSTracker) {
+    self.mapView = mapView
     self.gpx = gpx
+    self.gps = gps
+    self.mapDelegate = MapDelegate(self)
+    self.mapView.delegate = self.mapDelegate
+
   }
   
-  public mutating func startNewSegment() {
+  public func handleNewLocation(point pt: TrackPoint, isMajor: Bool) {
+    self.mapView.setCenter(pt.location, animated: true)
+    
+    if self.isTracking && isMajor {
+      self.add(pt.location)
+      
+      if let region = self.region() {
+        self.mapView.setRegion(region, animated: true)
+      }
+      
+      if self.gpx.tracks.last!.segments.last!.track.count == 1 {
+        let ann = TrackAnnotation(coordinate: pt.location, isStart: true)
+        self.mapView.addAnnotation(ann)
+      }
+      let newPoly = MKPolyline(coordinates: &self.coordCache, count: self.coordCache.count)
+      if let poly = self.currentPoly {
+        self.mapView.remove(poly)
+      } else {
+        self.trackPolys.append(newPoly)
+      }
+      self.mapView.add(newPoly)
+      self.currentPoly = newPoly
+    }
+
+  }
+  
+  public func startNewSegment() {
+    currentPoly = nil
     coordCache.removeAll()
     min_lat = Double.greatestFiniteMagnitude
     max_lat = -Double.greatestFiniteMagnitude
@@ -40,13 +100,25 @@ public struct TrackHistory {
     gpx.tracks.last!.segments.append(GPXData.TrackSeg())
   }
 
-  public mutating func add(_ coord : CLLocationCoordinate2D) {
+  public func endSegment(_ pt: TrackPoint?) {
+    if let pt = pt {
+      let place = TrackAnnotation(coordinate: pt.location, isStart: false)
+      self.mapView.addAnnotation(place)
+    }  
+  }
+  
+  public func storeWaypoint(location pt: TrackPoint) {
+    let ann = WaypointAnnotation(coordinate: pt.location)
+    self.mapView.addAnnotation(ann)
+  }
+  
+  public func add(_ coord : CLLocationCoordinate2D) {
     min_lat = min(min_lat, coord.latitude)
     max_lat = max(min_lat, coord.latitude)
     min_lon = min(min_lon, coord.longitude)
     max_lon = max(min_lon, coord.longitude)
 
-    gpx.tracks.last!.segments.last!.track.append(TrackPoint(location:coord))
+    gpx.tracks.last!.segments.last!.track.append(TrackPoint(location:coord, timestamp: Date()))
     coordCache.append(coord)
   }
   
@@ -65,6 +137,56 @@ public struct TrackHistory {
       return nil
     }
   }
+
+  class MapDelegate : NSObject, MKMapViewDelegate {
+    let parent : MapTracks
+    init(_ p : MapTracks) {
+      parent = p
+    }
+    public func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+      if overlay is MKPolyline {
+        let polyLine = overlay
+        let polyLineRenderer = MKPolylineRenderer(overlay: polyLine)
+        polyLineRenderer.strokeColor = UIColor.black
+        polyLineRenderer.lineWidth = 2.0
+        
+        return polyLineRenderer
+      }
+      fatalError("mapView: Unknown overlay")
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+      if let _ = annotation as? WaypointAnnotation {
+        var pin: MKPinAnnotationView!
+        if let view = mapView.dequeueReusableAnnotationView(withIdentifier: WaypointAnnotation.identifier) {
+          pin = view as! MKPinAnnotationView
+          pin.annotation = annotation
+        } else {
+          pin = MKPinAnnotationView(annotation: annotation, reuseIdentifier: WaypointAnnotation.identifier)
+        }
+        pin.pinTintColor = UIColor.blue
+        return pin
+      }
+      if let track = annotation as? TrackAnnotation {
+        var pin: MKPinAnnotationView!
+        if let view = mapView.dequeueReusableAnnotationView(withIdentifier: TrackAnnotation.identifier) {
+          pin = view as! MKPinAnnotationView
+          pin.annotation = annotation
+        } else {
+          pin = MKPinAnnotationView(annotation: annotation, reuseIdentifier: TrackAnnotation.identifier)
+        }
+        pin.pinTintColor = track.isStart ? UIColor.green : UIColor.red
+        return pin
+      }
+      return nil
+    }
+    
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+      //      print("mapView changed: \(mapView.visibleMapRect)")
+    }
+  }
+
 }
 
 

@@ -11,7 +11,7 @@ import XCTest
 
 class LoggyTest: XCTestCase {
   
-  let path = Bundle.init(for: LoggyTest.self).resourceURL!
+  let path = Bundle(for: LoggyTest.self).resourceURL!
   
   override func setUp() {
     super.setUp()

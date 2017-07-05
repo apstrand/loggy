@@ -15,6 +15,8 @@ public struct SettingName {
   public static let AlwaysAutoWaypoint = "always_auto_waypoint"
   public static let SpeedUnit = "speed_unit"
   public static let AltitudeUnit = "altitude_unit"
+  public static let LocationUnit = "location_unit"
+  public static let BearingUnit = "bearing_unit"
   public static let TrackingEnabled = "tracking_enabled"
 }
 

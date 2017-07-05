@@ -29,7 +29,7 @@ public class FileLogger {
   }
   
   public func log_waypoint(_ pt : TrackPoint) {
-    gpx.waypoints.append(pt)
+    gpx.waypoints.append(GPXData.Waypoint(point: pt, id: gpx.genId()))
   }
   
   public func finish() {

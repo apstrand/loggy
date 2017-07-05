@@ -26,9 +26,9 @@ public class GPSTracker {
     var distThreshold: Double
     func isSignificant(_ pt1: TrackPoint, _ pt2: TrackPoint) -> Bool {
       var time_diff = Double.greatestFiniteMagnitude
-      if let tm1 = pt1.timestamp, let tm2 = pt2.timestamp {
-        time_diff = tm1.timeIntervalSince(tm2)
-      }
+      let tm1 = pt1.timestamp
+      let tm2 = pt2.timestamp
+      time_diff = tm1.timeIntervalSince(tm2)
       let dist_diff = GPSTracker.greatCircleDist(pt1.location, pt2.location)
       return dist_diff > distThreshold || time_diff > timeThreshold
     }
