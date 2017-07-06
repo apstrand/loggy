@@ -12,7 +12,6 @@ public struct SettingName {
   public static let Suite = "group.se.nena.loggy"
   public static let PowerSave = "power_save"
   public static let AutoWaypoint = "auto_waypoint"
-  public static let AlwaysAutoWaypoint = "always_auto_waypoint"
   public static let SpeedUnit = "speed_unit"
   public static let AltitudeUnit = "altitude_unit"
   public static let LocationUnit = "location_unit"

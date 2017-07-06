@@ -16,7 +16,7 @@ class TrackViewController: UIViewController,
         GPXDelegate
 {
 
-  var gpxController: GPXBacking!
+  var gpsController: GPSController!
   var units: UnitController!
   
   required init?(coder aCoder: NSCoder) {
@@ -60,13 +60,12 @@ class TrackViewController: UIViewController,
 
   override func viewDidLoad() {
     super.viewDidLoad()
-//    gpxController.delegate = self
   }
 
   func refresh() {
     rows.removeAll()
     
-    let gpx = gpxController.gpxData()
+    let gpx = gpsController.gpxData()
 
     for waypoint in gpx.waypoints {
       let pt = waypoint.point

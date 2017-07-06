@@ -10,6 +10,43 @@ import Foundation
 import MapKit
 import CoreLocation
 
+public class LogTracks {
+  
+  
+  public var gpx: GPXData
+  public var isTracking: Bool = false
+  
+  public init(_ gpx: GPXData) {
+    self.gpx = gpx
+    
+  }
+  
+  public func handleNewLocation(point pt: TrackPoint, isMajor: Bool) {
+    
+    if self.isTracking && isMajor {
+      gpx.tracks.last!.segments.last!.track.append(TrackPoint(location:pt.location, timestamp: pt.timestamp))
+    }
+    
+  }
+  
+  public func startNewSegment() {
+
+    if gpx.tracks.count == 0 {
+      gpx.tracks.append(GPXData.Track())
+    }
+    gpx.tracks.last!.segments.append(GPXData.TrackSeg())
+    isTracking = true
+  }
+  
+  public func endSegment(_ pt: TrackPoint?) {
+    isTracking = false
+  }
+  
+  public func storeWaypoint(location pt: TrackPoint) {
+    gpx.waypoints.append(GPXData.Waypoint(point: pt, id: gpx.genId()))
+  }
+}
+
 public class MapTracks {
   
   public class LoggyAnnotation: NSObject, MKAnnotation {
@@ -47,14 +84,13 @@ public class MapTracks {
   var mapDelegate: MapDelegate?
   
   public var gpx: GPXData
-  private var gps: GPSTracker
   public var coordCache: [CLLocationCoordinate2D] = []
   public var isTracking: Bool = false
+  public var isStartingSegment: Bool = false
   
-  public init(_ mapView: MKMapView, _ gpx: GPXData, _ gps: GPSTracker) {
+  public init(_ mapView: MKMapView, _ gpx: GPXData) {
     self.mapView = mapView
     self.gpx = gpx
-    self.gps = gps
     self.mapDelegate = MapDelegate(self)
     self.mapView.delegate = self.mapDelegate
 
@@ -70,9 +106,10 @@ public class MapTracks {
         self.mapView.setRegion(region, animated: true)
       }
       
-      if self.gpx.tracks.last!.segments.last!.track.count == 1 {
+      if self.isStartingSegment {
         let ann = TrackAnnotation(coordinate: pt.location, isStart: true)
         self.mapView.addAnnotation(ann)
+        self.isStartingSegment = false
       }
       let newPoly = MKPolyline(coordinates: &self.coordCache, count: self.coordCache.count)
       if let poly = self.currentPoly {
@@ -98,9 +135,12 @@ public class MapTracks {
       gpx.tracks.append(GPXData.Track())
     }
     gpx.tracks.last!.segments.append(GPXData.TrackSeg())
+    isTracking = true
+    isStartingSegment = true
   }
 
   public func endSegment(_ pt: TrackPoint?) {
+    isTracking = false
     if let pt = pt {
       let place = TrackAnnotation(coordinate: pt.location, isStart: false)
       self.mapView.addAnnotation(place)
@@ -118,7 +158,6 @@ public class MapTracks {
     min_lon = min(min_lon, coord.longitude)
     max_lon = max(min_lon, coord.longitude)
 
-    gpx.tracks.last!.segments.last!.track.append(TrackPoint(location:coord, timestamp: Date()))
     coordCache.append(coord)
   }
   

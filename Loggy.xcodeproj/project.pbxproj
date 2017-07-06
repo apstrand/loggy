@@ -12,6 +12,7 @@
 		D011DECE1EFC052100A80A77 /* LoggyTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D011DEC71EFC052100A80A77 /* LoggyTools.framework */; };
 		D011DECF1EFC052100A80A77 /* LoggyTools.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D011DEC71EFC052100A80A77 /* LoggyTools.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D011DED41EFC09CC00A80A77 /* GPSTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D051220C1EF8A31800E7D825 /* GPSTracker.swift */; };
+		D01E83DD1F0D8C740038AF73 /* ObserverTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01E83DC1F0D8C740038AF73 /* ObserverTools.swift */; };
 		D05121FB1EF867DB00E7D825 /* LoggyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */; };
 		D05121FD1EF867DB00E7D825 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */; };
 		D05122001EF867DB00E7D825 /* LoggyMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */; };
@@ -77,6 +78,7 @@
 		D011DEC71EFC052100A80A77 /* LoggyTools.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LoggyTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D011DEC91EFC052100A80A77 /* LoggyTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoggyTools.h; sourceTree = "<group>"; };
 		D011DECA1EFC052100A80A77 /* LoggyTools_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = LoggyTools_Info.plist; sourceTree = "<group>"; };
+		D01E83DC1F0D8C740038AF73 /* ObserverTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverTools.swift; sourceTree = "<group>"; };
 		D05121F71EF867DB00E7D825 /* Loggy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Loggy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggyAppDelegate.swift; sourceTree = "<group>"; };
 		D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 			children = (
 				D0C9B16E1F05F7EF000BC92D /* LabelTapHandler.swift */,
 				D0C951081F09F681005E08D7 /* Settings.swift */,
+				D01E83DC1F0D8C740038AF73 /* ObserverTools.swift */,
 			);
 			name = generic;
 			sourceTree = "<group>";
@@ -513,6 +516,7 @@
 				D011DED41EFC09CC00A80A77 /* GPSTracker.swift in Sources */,
 				D0C9B1721F05FB9B000BC92D /* TrackTools.swift in Sources */,
 				D06096B31F07F1F7002158DB /* UnitHandling.swift in Sources */,
+				D01E83DD1F0D8C740038AF73 /* ObserverTools.swift in Sources */,
 				D0066EA01EFF4B4C001225DD /* GPXData.swift in Sources */,
 				D0C9B1781F0607C7000BC92D /* CameraPhotosObserver.swift in Sources */,
 				D06096B21F07F1AF002158DB /* Constants.swift in Sources */,

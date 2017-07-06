@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>0.1</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -28,13 +28,17 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>4</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Access GPS Location in background</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Access GPS Location when active</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Observe camera captures to auto create waypoints</string>
 	<key>NSUbiquitousContainers</key>
 	<dict>
 		<key>iCloud.se.nena.Loggy</key>
@@ -55,8 +59,6 @@
 	<array>
 		<string>armv7</string>
 	</array>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Observe camera captures to auto create waypoints</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

@@ -13,7 +13,6 @@ import LoggyTools
 class SettingsViewController: UIViewController {
 
   @IBOutlet weak var autoWaypointToggle: UISwitch!
-  @IBOutlet weak var alwaysAutoWaypointToggle: UISwitch!
   @IBOutlet weak var powerSaveToggle: UISwitch!
   
   var settings: SettingsRW!
@@ -27,15 +26,10 @@ class SettingsViewController: UIViewController {
   
     powerSaveToggle.isOn = settings.isSet(SettingName.PowerSave)
     autoWaypointToggle.isOn = settings.isSet(SettingName.AutoWaypoint)
-    alwaysAutoWaypointToggle.isOn = settings.isSet(SettingName.AlwaysAutoWaypoint)
 
   
   }
-  
-  @IBAction func toggleAlwaysAutowaypoint(sender: UISwitch) {
-    settings.update(value: sender.isOn ? "true" : "false", forKey: SettingName.AlwaysAutoWaypoint)
-  }
-  
+    
   @IBAction func toggleAutowaypoint(sender: UISwitch) {
     settings.update(value: sender.isOn ? "true" : "false", forKey: SettingName.AutoWaypoint)
   }

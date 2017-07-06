@@ -139,7 +139,6 @@
                     <connections>
                         <outlet property="altitudeLabel" destination="O9m-sd-ZGU" id="ngG-6M-NoX"/>
                         <outlet property="altitudeValue" destination="du1-sb-aFx" id="CcZ-Q4-cec"/>
-                        <outlet property="alwaysAutoWaypointToggle" destination="oCr-mc-aHS" id="w1a-1w-A62"/>
                         <outlet property="autoWaypointToggle" destination="2Dy-kd-gIj" id="p14-S3-jRr"/>
                         <outlet property="bearingLabel" destination="HM6-3h-3Ma" id="OIE-9C-YJz"/>
                         <outlet property="bearingValue" destination="ZfC-Cu-Y9o" id="Cwe-J9-gWB"/>
@@ -275,64 +274,46 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4h9-3I-s2O">
-                                <rect key="frame" x="310" y="579" width="51" height="31"/>
+                                <rect key="frame" x="310" y="565" width="51" height="31"/>
                                 <connections>
                                     <action selector="togglePowerSaveWithSender:" destination="XYf-5Y-BZf" eventType="valueChanged" id="EpI-M9-JBI"/>
                                     <action selector="togglePowerSaveWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="Wh0-GX-BAl"/>
                                 </connections>
                             </switch>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Dy-kd-gIj">
-                                <rect key="frame" x="310" y="497" width="51" height="31"/>
+                                <rect key="frame" x="310" y="512" width="51" height="31"/>
                                 <connections>
                                     <action selector="toggleAutowaypointWithSender:" destination="XYf-5Y-BZf" eventType="valueChanged" id="EFh-h3-13G"/>
                                     <action selector="toggleAutowaypointWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="Eiy-sj-ajk"/>
                                 </connections>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Power save:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nfK-ic-xqJ">
-                                <rect key="frame" x="210" y="584" width="92" height="21"/>
+                                <rect key="frame" x="210" y="570" width="92" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Auto waypoints:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZQi-IQ-Q1a">
-                                <rect key="frame" x="180" y="502" width="122" height="21"/>
+                                <rect key="frame" x="180" y="517" width="122" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Always:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VBU-i0-Dkd">
-                                <rect key="frame" x="244" y="543" width="58" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oCr-mc-aHS">
-                                <rect key="frame" x="310" y="538" width="51" height="31"/>
-                                <connections>
-                                    <action selector="toggleAlwaysAutowaypoint:" destination="BYZ-38-t0r" eventType="valueChanged" id="zYc-rt-eto"/>
-                                    <action selector="toggleAlwaysAutowaypointWithSender:" destination="XYf-5Y-BZf" eventType="valueChanged" id="qBs-mS-85A"/>
-                                </connections>
-                            </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="oCr-mc-aHS" firstAttribute="top" secondItem="2Dy-kd-gIj" secondAttribute="bottom" constant="10" id="3Hd-sV-EV5"/>
                             <constraint firstItem="2Dy-kd-gIj" firstAttribute="leading" secondItem="ZQi-IQ-Q1a" secondAttribute="trailing" constant="8" symbolic="YES" id="9Oe-uw-UaJ"/>
-                            <constraint firstItem="2Dy-kd-gIj" firstAttribute="leading" secondItem="oCr-mc-aHS" secondAttribute="leading" id="Csi-CI-H3e"/>
                             <constraint firstItem="ZQi-IQ-Q1a" firstAttribute="centerY" secondItem="2Dy-kd-gIj" secondAttribute="centerY" id="Kdg-qZ-Gjj"/>
                             <constraint firstItem="nfK-ic-xqJ" firstAttribute="centerY" secondItem="4h9-3I-s2O" secondAttribute="centerY" id="VF7-A5-E8V"/>
                             <constraint firstItem="2Dy-kd-gIj" firstAttribute="trailing" secondItem="E7O-1l-buc" secondAttribute="trailingMargin" id="Wfs-Au-B3g"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="4h9-3I-s2O" secondAttribute="trailing" id="Xfn-Oo-tTd"/>
                             <constraint firstItem="4h9-3I-s2O" firstAttribute="leading" secondItem="nfK-ic-xqJ" secondAttribute="trailing" constant="8" symbolic="YES" id="Y2e-hT-OcZ"/>
-                            <constraint firstItem="VBU-i0-Dkd" firstAttribute="centerY" secondItem="oCr-mc-aHS" secondAttribute="centerY" id="YmS-0J-CHZ"/>
-                            <constraint firstItem="oCr-mc-aHS" firstAttribute="leading" secondItem="4h9-3I-s2O" secondAttribute="leading" id="eW4-dj-m3E"/>
-                            <constraint firstItem="4h9-3I-s2O" firstAttribute="top" secondItem="oCr-mc-aHS" secondAttribute="bottom" constant="10" id="fMo-uE-4Im"/>
-                            <constraint firstItem="oCr-mc-aHS" firstAttribute="leading" secondItem="VBU-i0-Dkd" secondAttribute="trailing" constant="8" symbolic="YES" id="mM3-53-cKe"/>
-                            <constraint firstItem="xKn-up-6qr" firstAttribute="top" secondItem="4h9-3I-s2O" secondAttribute="bottom" constant="8" symbolic="YES" id="qko-Mv-Tzf"/>
+                            <constraint firstItem="4h9-3I-s2O" firstAttribute="top" secondItem="2Dy-kd-gIj" secondAttribute="bottom" constant="22" id="iYg-12-opw"/>
+                            <constraint firstItem="xKn-up-6qr" firstAttribute="top" secondItem="4h9-3I-s2O" secondAttribute="bottom" constant="22" id="qko-Mv-Tzf"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" image="cog" selectedImage="cog" id="5ZV-1A-dmo"/>
                     <connections>
-                        <outlet property="alwaysAutoWaypointToggle" destination="oCr-mc-aHS" id="S7A-Cb-pas"/>
                         <outlet property="autoWaypointToggle" destination="2Dy-kd-gIj" id="7Rc-8w-lG3"/>
                         <outlet property="powerSaveToggle" destination="4h9-3I-s2O" id="PXl-gS-NfL"/>
                     </connections>

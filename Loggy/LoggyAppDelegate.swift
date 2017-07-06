@@ -23,11 +23,11 @@ class LoggyAppDelegate: UIResponder, UIApplicationDelegate {
           for vc in vcs {
             if let vc = vc as? DashboardViewController {
               vc.settings = appState
-              vc.gpxController = appState
+              vc.gpsController = appState
               vc.units = appState
             }
             if let vc = vc as? TrackViewController {
-              vc.gpxController = appState
+              vc.gpsController = appState
               vc.units = appState
             }
             if let vc = vc as? SettingsViewController {

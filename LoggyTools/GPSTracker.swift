@@ -12,13 +12,17 @@ import CoreLocation
 public class GPSTracker {
 
   public typealias TrackLogger = (TrackPoint, Bool) -> Void
+  public typealias WaypointLogger = (TrackPoint) -> Void
   public typealias StateMonitor = (Bool) -> Void
 
-  var logger : TrackLogger?
+  var loggers : [(Int,TrackLogger)] = []
+  var waypointLoggers : [(Int,WaypointLogger)] = []
+  var loggerId = 0
   let loc_mgr : CLLocationManager
   var pendingTracking = false
+  var pendingOneshotTracking : [((TrackPoint) -> Void)] = []
   var loc_delegate : LocDelegate! = nil
-  private var is_tracking = false
+  private var isActive = false
   var state_callback : StateMonitor?
   
   struct Config {
@@ -46,24 +50,62 @@ public class GPSTracker {
 
   public func monitorState(callback : @escaping StateMonitor) {
     self.state_callback = callback
-    self.state_callback?(is_tracking)
+    self.state_callback?(isActive)
   }
   
   func startPendingTracking() {
-    if pendingTracking {
+    if pendingTracking || pendingOneshotTracking.count > 0{
       loc_mgr.startUpdatingLocation()
-      is_tracking = true
-      self.state_callback?(is_tracking)
+      isActive = true
+      self.state_callback?(isActive)
     }
   }
   
-  public func setTrackLogger(_ logger : @escaping TrackLogger) {
-    self.logger = logger
+  public func addTrackLogger(_ logger : @escaping TrackLogger) -> Token {
+    loggerId += 1
+    let removeId = loggerId
+    self.loggers.append((removeId,logger))
+    return TokenImpl {
+      for ix in self.loggers.indices {
+        if self.loggers[ix].0 == removeId {
+          self.loggers.remove(at: ix)
+          break
+        }
+      }
+    }
+  }
+  public func addWaypointLogger(_ logger : @escaping WaypointLogger) -> Token {
+    loggerId += 1
+    let removeId = loggerId
+    self.waypointLoggers.append((removeId,logger))
+    return TokenImpl {
+      for ix in self.waypointLoggers.indices {
+        if self.waypointLoggers[ix].0 == removeId {
+          self.waypointLoggers.remove(at: ix)
+          break
+        }
+      }
+    }
   }
   
+  public func storeWaypoint() {
+    self.withCurrentLocation { pt in
+      self.storeWaypoint(location:pt)
+    }
+  }
+  public func storeWaypoint(location pt: TrackPoint) {
+    for logger in self.waypointLoggers {
+      logger.1(pt)
+    }
+  }
+
   public func start() {
     pendingTracking = true
     
+    internalStart()
+  }
+  
+  private func internalStart() {
     let status = CLLocationManager.authorizationStatus()
     print("start: gps status: \(status.rawValue)")
     
@@ -77,27 +119,45 @@ public class GPSTracker {
     default:
       break
     }
+    
   }
   
   public func stop() {
     pendingTracking = false
+    internalStop()
+  }
+  
+  fileprivate func internalStop() {
     loc_mgr.stopUpdatingLocation()
-    is_tracking = false
-    self.state_callback?(is_tracking)
+    isActive = false
+    self.state_callback?(isActive)
   }
   
   public func currentLocation() -> TrackPoint? {
-    if let pt = last_minor_point {
+    if let pt = last_minor_point, isActive {
       return pt
     } else {
       return nil
     }
   }
   
+  public func withCurrentLocation(callback: @escaping (TrackPoint) -> Void) {
+    if let pt = last_minor_point, isActive {
+      callback(pt)
+    } else {
+      pendingOneshotTracking.append(callback)
+      internalStart()
+    }
+  }
+  
+  public func isGpsActive() -> Bool {
+    return isActive
+  }
+  
   func handleNewLocation(_ tp : TrackPoint) {
     last_minor_point = tp
     let significant = last_point == nil || config.isSignificant(last_point!, tp)
-    if let logger = logger {
+    for (_,logger) in loggers {
       logger(tp, significant)
     }
     last_point = tp
@@ -110,9 +170,22 @@ public class GPSTracker {
     }
     func locationManager(_ : CLLocationManager, didUpdateLocations locs: [CLLocation]) {
 //      print("Tells the delegate that new location data is available: [\(locs)]")
+      var last_pt : TrackPoint?
       for loc in locs {
-        let tp : TrackPoint = TrackPoint(location: loc.coordinate, timestamp: loc.timestamp)
-        parent.handleNewLocation(tp)
+        let pt = TrackPoint(location: loc.coordinate, timestamp: loc.timestamp)
+        parent.handleNewLocation(pt)
+        last_pt = pt
+      }
+      if parent.pendingOneshotTracking.count > 0 {
+        if let pt = last_pt {
+          for cb in parent.pendingOneshotTracking {
+            cb(pt)
+          }
+          parent.pendingOneshotTracking.removeAll()
+        }
+        if !parent.pendingTracking {
+          parent.internalStop()
+        }
       }
     }
     

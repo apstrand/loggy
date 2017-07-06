@@ -9,8 +9,9 @@
 import Foundation
 import LoggyTools
 
-protocol GPXBacking {
+protocol GPSController {
   func gpxData() -> GPXData
+  func gps() -> GPSTracker
   func load(path: URL) throws
   func save(path: URL) throws
 }
@@ -48,13 +49,17 @@ struct LoggySettings: SettingsDefaults {
 class AppState: SettingsImpl<LoggySettings>, UnitController, SettingsRW {
 
   var gpxInst = GPXData()
+  let gpsModule = GPSTracker()
 
+  var logTracks : LogTracks!
+  
   var location : LocationUnit!
   var speed : SpeedUnit!
   var altitude : AltitudeUnit!
   var bearing : BearingUnit!
   
-  
+  var photosObserver: CameraPhotosObserver!
+
   var regs = TokenRegs()
 
   public override init() {
@@ -72,6 +77,34 @@ class AppState: SettingsImpl<LoggySettings>, UnitController, SettingsRW {
     regs += self.observe(key: SettingName.LocationUnit) {
       self.location = LocationUnit.parseUnit($0)
     }
+    
+    regs += self.observe(key: SettingName.TrackingEnabled) { value in
+      if (value == "true") {
+        self.gps().start()
+      } else {
+        self.gps().stop()
+      }
+    }
+    
+    logTracks = LogTracks(gpxData())
+    regs += self.gps().addTrackLogger { pt, isMajor in
+      self.logTracks.handleNewLocation(point: pt, isMajor: isMajor)
+    }
+    regs += self.gps().addWaypointLogger { pt in
+      self.logTracks.storeWaypoint(location: pt)
+    }
+    
+    self.photosObserver = CameraPhotosObserver({ loc, date in
+      if self.isSet(SettingName.AutoWaypoint) {
+        if let date = date {
+          self.gps().storeWaypoint(location: TrackPoint(location:loc.coordinate, timestamp:date))
+        } else {
+          print("No date in photo!")
+        }
+      }
+    })
+    
+
   }
 
   var persistURL : URL = {
@@ -95,11 +128,15 @@ class AppState: SettingsImpl<LoggySettings>, UnitController, SettingsRW {
   }
 }
 
-extension AppState: GPXBacking
+extension AppState: GPSController
 {
   func gpxData() -> GPXData {
     return gpxInst
   }
+  func gps() -> GPSTracker {
+    return gpsModule
+  }
+
   
   func load(path: URL) {
     DispatchQueue.global(qos: .background).async {

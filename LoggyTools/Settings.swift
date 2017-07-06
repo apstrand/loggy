@@ -9,18 +9,6 @@
 import Foundation
 
 
-public class Token {
-}
-
-public class TokenRegs {
-  var tokens: [Token] = []
-  public init() { }
-}
-
-public func +=(regs: inout TokenRegs, token: Token) {
-  regs.tokens.append(token)
-}
-
 public protocol SettingsReader {
   func value(forKey key: String) -> String?
   func isSet(_ key: String) -> Bool
@@ -65,26 +53,7 @@ open class SettingsImpl<Settings : SettingsDefaults>: SettingsReader, SettingsWr
     }
   }
   
-  class TokenImpl: Token {
-    let impl: SettingsImpl
-    let listenerId: Int
-    init(_ impl: SettingsImpl, _ listenerId: Int) {
-      self.impl = impl
-      self.listenerId = listenerId
-    }
-    deinit {
-      outer: for (key,vs) in impl.listeners {
-        for ix in 0..<vs.count {
-          let id = vs[ix].0
-          if id == listenerId {
-            impl.listeners[key]!.remove(at: ix)
-            print("removed listener \(listenerId) for \(key)")
-            break outer
-          }
-        }
-      }
-    }
-  }
+  
   public func observe(key: String, onChange callback: @escaping (String) -> Void) -> Token {
     listenerId += 1
     if let _ = listeners[key] {
@@ -97,7 +66,19 @@ open class SettingsImpl<Settings : SettingsDefaults>: SettingsReader, SettingsWr
         callback(val)
       }
     }
-    return TokenImpl(self, listenerId)
+    let removeId = listenerId
+    return TokenImpl {
+      outer: for (key,vs) in self.listeners {
+        for ix in 0..<vs.count {
+          let id = vs[ix].0
+          if id == removeId {
+            self.listeners[key]!.remove(at: ix)
+            print("removed listener \(removeId) for \(key)")
+            break outer
+          }
+        }
+      }
+    }
   }
   
 }
