@@ -61,7 +61,7 @@ class AppState: SettingsImpl<LoggySettings>, UnitController, SettingsRW {
   var photosObserver: CameraPhotosObserver!
 
   var regs = TokenRegs()
-
+  
   public override init() {
     super.init()
 
@@ -86,24 +86,23 @@ class AppState: SettingsImpl<LoggySettings>, UnitController, SettingsRW {
       }
     }
     
-    logTracks = LogTracks(gpxData())
-    regs += self.gps().addTrackLogger { pt, isMajor in
+    self.logTracks = LogTracks(gpxData())
+    regs += self.gps().addTrackPointLogger { pt, isMajor in
       self.logTracks.handleNewLocation(point: pt, isMajor: isMajor)
-    }
-    regs += self.gps().addWaypointLogger { pt in
-      self.logTracks.storeWaypoint(location: pt)
+      
+      self.pingAutoSave(self.gpxData())
     }
     
     self.photosObserver = CameraPhotosObserver({ loc, date in
+      print("Found photo at \(loc) taken on \(date)")
       if self.isSet(SettingName.AutoWaypoint) {
         if let date = date {
-          self.gps().storeWaypoint(location: TrackPoint(location:loc.coordinate, timestamp:date))
+          self.logTracks.storeWaypoint(location: TrackPoint(location:loc.coordinate, timestamp:date))
         } else {
           print("No date in photo!")
         }
       }
     })
-    
 
   }
 
@@ -126,6 +125,19 @@ class AppState: SettingsImpl<LoggySettings>, UnitController, SettingsRW {
   func autoSave() {
     save(path: persistURL)
   }
+  
+  private var pendingAutoSave = false
+  func pingAutoSave(_ gpx: GPXData) {
+    if !self.pendingAutoSave {
+      self.pendingAutoSave = true
+      DispatchQueue.global(qos: .background).asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.seconds(2)) {
+        self.autoSave()
+        DispatchQueue.main.async {
+          self.pendingAutoSave = false
+        }
+      }
+    }
+  }
 }
 
 extension AppState: GPSController
@@ -142,7 +154,7 @@ extension AppState: GPSController
     DispatchQueue.global(qos: .background).async {
       if let gpx = GPXData.parse(contentsOf: path) {
         DispatchQueue.main.async {
-          self.gpxInst.assign(from: gpx)
+          self.logTracks.load(from: gpx)
         }
       }
     }

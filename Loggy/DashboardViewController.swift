@@ -52,7 +52,7 @@ class DashboardViewController: UIViewController {
   }
   
   func updateLocationInfo(_ pt: TrackPoint, color: UIColor = UIColor.black) {
-    self.locationValue.text = self.units.location.format((pt.location.latitude, pt.location.longitude))
+    self.locationValue.text = self.units.location.format((pt.location.latitude, pt.location.longitude), separator:"\n")
     if let ele = pt.elevation {
       self.altitudeValue.text = self.units.altitude.format(ele)
     }
@@ -99,30 +99,23 @@ class DashboardViewController: UIViewController {
       self.updateInterfaceState(isTracking: value == "true")
     }
     
-    gpsController.gps().monitorState { isActive in
-      self.updateInterfaceState(isTracking: self.isTracking)
-    }
+//    gpsController.gps().monitorState { isActive in
+//      self.updateInterfaceState(isTracking: self.isTracking)
+//    }
     
-    regs += gpsController.gps().addTrackLogger { pt, isMajor in
-
-      if isMajor {
+    regs += self.logTracks.observeTrackData(LogTracks.Filter(majorPoints: true)) { track, seg, point in
+      if let pt = point {
         self.updateLocationInfo(pt)
+        self.mapTracks.handleNewLocation(point:pt, isMajor:true)
       }
-      
-      self.mapTracks.handleNewLocation(point:pt, isMajor:isMajor)
     }
     
-    regs += self.gpsController.gps().addWaypointLogger { pt in
-      self.handleWaypoint(pt)
+    regs += self.logTracks.observeWaypoints(LogTracks.Filter()) { waypoint in
+      self.updateLocationInfo(waypoint.point, color: UIColor.blue)
+      print("Store waypoint [location \(waypoint.point.location)] [date \(waypoint.point.timestamp)]")
+      self.mapTracks.storeWaypoint(waypoint)
     }
   }
-  func handleWaypoint(_ pt : TrackPoint) {
-    self.updateLocationInfo(pt, color: UIColor.blue)
-    print("Store waypoint [location \(pt.location)] [date \(pt.timestamp)]")
-    mapTracks.storeWaypoint(location: pt)
-  }
-  
-  
 
   func updateInterfaceState(isTracking: Bool) {
     self.startButton.isEnabled = !isTracking
@@ -153,17 +146,22 @@ class DashboardViewController: UIViewController {
   
   
   @IBAction func startTracking(_ sender: Any) {
+    logTracks.startNewSegment()
     mapTracks.startNewSegment()
     settings.update(value: "true", forKey:SettingName.TrackingEnabled)
   }
 
   @IBAction func stopTracking(_ sender: Any) {
-    mapTracks.endSegment(gpsController.gps().currentLocation())
+    let pt = gpsController.gps().currentLocation()
+    mapTracks.endSegment(pt)
+    logTracks.endSegment(pt)
     settings.update(value: "false", forKey:SettingName.TrackingEnabled)
   }
   
   @IBAction func storeWaypoint(sender: UIButton) {
-    gpsController.gps().storeWaypoint()
+    self.gpsController.gps().withCurrentLocation { pt in
+      self.logTracks.storeWaypoint(location: pt)
+    }
   }
 
   override func didReceiveMemoryWarning() {

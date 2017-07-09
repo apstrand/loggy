@@ -12,7 +12,7 @@ protocol Unit {
   static func parseUnit(_ str: String) -> Self
 //  static func parseValue(_ str: String) -> ValueType
   associatedtype ValueType
-  func format(_ value : ValueType) -> String
+  func format(_ value : ValueType, separator: String) -> String
   func next() -> Self
 }
 
@@ -84,7 +84,7 @@ public enum SpeedUnit : String, Unit {
       return .M_S
     }
   }
-  public func format(_ value : Double) -> String {
+  public func format(_ value : Double, separator: String = " ") -> String {
     switch self {
     case .M_S:
       return String(format: "%.1f m/s", value)
@@ -111,7 +111,7 @@ public enum AltitudeUnit : String, Unit {
     }
   }
   public typealias ValueType = Double
-  public func format(_ value : ValueType) -> String {
+  public func format(_ value : ValueType, separator: String = " ") -> String {
     switch self {
     case .Meter:
       return String(format:"%.0f m", value)
@@ -155,14 +155,14 @@ public enum LocationUnit : String, Unit {
     return (neg ? labels.0 : labels.1) + String(format:" %d° %d' %f\"", dec, min, sec)
   }
   
-  public func format(_ value : ValueType) -> String {
+  public func format(_ value : ValueType, separator: String = " ") -> String {
     switch self {
     case .Decimal:
       return String(format:"%f %f", value.0, value.1)
     case .DMS:
       let lat = formatDMS(deg:value.0, labels:("W","E"))
       let lon = formatDMS(deg:value.1, labels:("S","N"))
-      return lat + " " + lon
+      return lat + separator + lon
     }
   }
   public func next() -> LocationUnit {

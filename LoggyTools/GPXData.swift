@@ -29,27 +29,38 @@ public struct TrackPoint {
   }
 }
 
+/*
 public protocol GPXDelegate {
   func waypointUpdate(waypoint: GPXData.Waypoint)
   func segmentUpdate(segment: GPXData.TrackSeg)
   func trackUpdate(track: GPXData.Track)
 }
+ */
 
 public class GPXData {
   
   // see http://www.topografix.com/gpx.asp
-  public class TrackSeg {
-    public var id: Int = 0
-    public var name: String?
-    public var track: [TrackPoint] = []
-  }
   public class Track {
-    public var id: Int = 0
+    public typealias Id = Int
+    public var id: Id
     public var name: String?
     public var segments: [TrackSeg] = []
+    public init(id: Int) {
+      self.id = id
+    }
+  }
+  public class TrackSeg {
+    public typealias Id = Int
+    public var id: Id
+    public var name: String?
+    public var track: [TrackPoint] = []
+    public init(id: Int) {
+      self.id = id
+    }
   }
   public class Waypoint {
-    public var id: Int
+    public typealias Id = Int
+    public var id: Id
     public var point: TrackPoint
     public init(point: TrackPoint, id: Int) {
       self.point = point
@@ -66,14 +77,7 @@ public class GPXData {
   }
   
   public init() { }
-  
-  
-  public func assign(from other: GPXData) {
-    self.tracks = other.tracks
-    self.waypoints = other.waypoints
-    self.nextId = other.nextId
-  }
-
+    
   public func withCurrentTrack<T>(_ fn: ((inout [TrackPoint]) -> T)) -> T {
     return fn(&tracks.last!.segments.last!.track)
   }
@@ -161,10 +165,10 @@ public class GPXData {
         break
       case "trk":
         name_stack.append(nil)
-        gpx.tracks.append(Track())
+        gpx.tracks.append(Track(id:gpx.genId()))
         break
       case "trkseg":
-        gpx.tracks.last?.segments.append(TrackSeg())
+        gpx.tracks.last!.segments.append(TrackSeg(id:gpx.genId()))
         break
       case "name":
         break

@@ -11,33 +11,38 @@ import UIKit
 import LoggyTools
 import CoreLocation
 
+class TrackDataCell: UITableViewCell {
+  
+  @IBOutlet weak var track: UILabel!
+  @IBOutlet weak var info: UILabel!
+  @IBOutlet weak var status: UILabel!
+}
+
+class WaypointCell: UITableViewCell {
+  
+  @IBOutlet weak var waypoint: UILabel!
+  @IBOutlet weak var info: UILabel!
+}
+
 class TrackViewController: UIViewController,
-        UITableViewDataSource, UITableViewDelegate,
-        GPXDelegate
+        UITableViewDataSource, UITableViewDelegate
 {
 
-  var gpsController: GPSController!
+  var logTracks: LogTracks!
   var units: UnitController!
   
+  var regs = TokenRegs()
+  
+  @IBOutlet weak var tableView: UITableView!
+
   required init?(coder aCoder: NSCoder) {
     super.init(coder: aCoder)
-  }
-  
-  func waypointUpdate(waypoint: GPXData.Waypoint) {
-    
-  }
-  
-  func segmentUpdate(segment: GPXData.TrackSeg) {
-
-  }
-  
-  func trackUpdate(track: GPXData.Track) {
-    
   }
   
   enum RowType: String {
     case Track = "track"
     case Waypoint = "waypoint"
+    case Segment = "segment"
     case SegmentStart = "segment-start"
     case SegmentEnd = "segment-end"
   }
@@ -47,8 +52,9 @@ class TrackViewController: UIViewController,
     let location: String
     let date: Date
     let name: String?
-    let extra: String? = nil
+    let extra: String?
   }
+  var tableViewLoaded = false
   var rows: [RowData] = []
   
   let dateFormatter : DateFormatter = {
@@ -60,36 +66,68 @@ class TrackViewController: UIViewController,
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    regs += logTracks.observeTrackData(LogTracks.Filter(fullHistory:true)) { track, seg, point in
+      if track == nil {
+        print("TrackView: reload all")
+        self.rows.removeAll()
+        self.tableView.reloadData()
+      } else if let seg = seg {
+        if let row = self.segmentToRowData(seg) {
+          self.rows.append(row)
+        }
+      } else if let pt = point {
+        // update segment with new size
+      }
+      var ix = self.rows.endIndex
+      ix = self.rows.index(before: ix)
+      while ix >= self.rows.startIndex {
+        if self.rows[ix].type == .Segment {
+//          self.rows[ix].extra =
+          return
+        }
+        ix = self.rows.index(before: ix)
+      }
+    }
+    regs += logTracks.observeWaypoints(LogTracks.Filter(fullHistory:true)) { waypoint in
+      self.rows.append(self.waypointToRowData(waypoint))
+      if self.tableViewLoaded {
+        self.tableView.insertRows(at: [IndexPath(row: self.rows.count-1, section: 0)], with: .automatic)
+      }
+    }
   }
 
-  func refresh() {
-    rows.removeAll()
-    
-    let gpx = gpsController.gpxData()
-
-    for waypoint in gpx.waypoints {
-      let pt = waypoint.point
-      let loc = String(format: "%.3f %.3f", pt.location.latitude, pt.location.longitude)
-      rows.append(RowData(id: waypoint.id, type: .Waypoint, location: loc, date: pt.timestamp, name: pt.name))
-    }
-    
-    for track in gpx.tracks {
-      let segs = track.segments.count
-      if segs > 0 {
-        let tps = track.segments[0].track.count
-        if tps > 0 {
-          let pt = track.segments.first!.track.first!
-          let loc = String(format: "%.3f %.3f", pt.location.latitude, pt.location.longitude)
-          rows.append(RowData(id: track.id, type: .Track, location: loc, date: pt.timestamp, name: pt.name))
-          
-        }
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    if let paths = tableView.indexPathsForSelectedRows {
+      for path in paths {
+        tableView.deselectRow(at: path, animated: false)
       }
-//      let extra = NSString(format: "[segments %d]", segs)
     }
-
   }
   
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    tableView.flashScrollIndicators()
+  }
+  
+  func waypointToRowData(_ waypoint: GPXData.Waypoint) -> RowData {
+    let pt = waypoint.point
+    let loc = String(format: "%.3f %.3f", pt.location.latitude, pt.location.longitude)
+    return RowData(id: waypoint.id, type: .Waypoint, location: loc, date: pt.timestamp, name: pt.name, extra: "WPT")
+  }
+  
+  func segmentToRowData(_ seg: GPXData.TrackSeg) -> RowData? {
+    if let pt = seg.track.first {
+      let loc = String(format: "%.3f %.3f", pt.location.latitude, pt.location.longitude)
+      return RowData(id: seg.id, type: .Segment, location: loc, date: pt.timestamp, name: pt.name, extra: "\(seg.track.count)")
+    }
+    return nil
+  }
+
+  
   public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    tableViewLoaded = true
     if (section == 0) {
       return rows.count
     }
@@ -97,19 +135,35 @@ class TrackViewController: UIViewController,
   }
 
   public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    if let view = tableView.dequeueReusableCell(withIdentifier: RowType.Track.rawValue) {
-      
-      return view
-    } else {
-      let view = UITableViewCell(style: .default, reuseIdentifier: RowType.Track.rawValue)
-      return view
+    let rowData = rows[indexPath.row]
+    
+    switch rowData.type {
+    case .Waypoint:
+      if let view = tableView.dequeueReusableCell(withIdentifier: rowData.type.rawValue) as? WaypointCell {
+        view.waypoint.text = rowData.location
+        view.info.text = dateFormatter.string(for:rowData.date)
+        return view
+      }
+      break
+    case .Segment:
+      if let view = tableView.dequeueReusableCell(withIdentifier: rowData.type.rawValue) as? TrackDataCell {
+        view.track.text = "Track"
+        view.info.text = dateFormatter.string(for:rowData.date)
+        view.status.text = rowData.extra
+        return view
+      }
+      break
+    default:
+      break
     }
+    let view = UITableViewCell(style: .default, reuseIdentifier: "fallback")
+    view.textLabel?.text = "Unknown type: " + rowData.type.rawValue
+    return view
   }
   
   func numberOfSections(in tableView: UITableView) -> Int {
     return 1
   }
-  
   
 
 }

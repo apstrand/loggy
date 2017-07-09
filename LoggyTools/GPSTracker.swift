@@ -11,12 +11,10 @@ import CoreLocation
 
 public class GPSTracker {
 
-  public typealias TrackLogger = (TrackPoint, Bool) -> Void
-  public typealias WaypointLogger = (TrackPoint) -> Void
+  public typealias TrackPointLogger = (TrackPoint, Bool) -> Void
   public typealias StateMonitor = (Bool) -> Void
 
-  var loggers : [(Int,TrackLogger)] = []
-  var waypointLoggers : [(Int,WaypointLogger)] = []
+  var loggers : [(Int,TrackPointLogger)] = []
   var loggerId = 0
   let loc_mgr : CLLocationManager
   var pendingTracking = false
@@ -60,8 +58,7 @@ public class GPSTracker {
       self.state_callback?(isActive)
     }
   }
-  
-  public func addTrackLogger(_ logger : @escaping TrackLogger) -> Token {
+  public func addTrackPointLogger(_ logger : @escaping TrackPointLogger) -> Token {
     loggerId += 1
     let removeId = loggerId
     self.loggers.append((removeId,logger))
@@ -74,30 +71,7 @@ public class GPSTracker {
       }
     }
   }
-  public func addWaypointLogger(_ logger : @escaping WaypointLogger) -> Token {
-    loggerId += 1
-    let removeId = loggerId
-    self.waypointLoggers.append((removeId,logger))
-    return TokenImpl {
-      for ix in self.waypointLoggers.indices {
-        if self.waypointLoggers[ix].0 == removeId {
-          self.waypointLoggers.remove(at: ix)
-          break
-        }
-      }
-    }
-  }
   
-  public func storeWaypoint() {
-    self.withCurrentLocation { pt in
-      self.storeWaypoint(location:pt)
-    }
-  }
-  public func storeWaypoint(location pt: TrackPoint) {
-    for logger in self.waypointLoggers {
-      logger.1(pt)
-    }
-  }
 
   public func start() {
     pendingTracking = true

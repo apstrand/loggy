@@ -25,9 +25,10 @@ class LoggyAppDelegate: UIResponder, UIApplicationDelegate {
               vc.settings = appState
               vc.gpsController = appState
               vc.units = appState
+              vc.logTracks = appState.logTracks
             }
             if let vc = vc as? TrackViewController {
-              vc.gpsController = appState
+              vc.logTracks = appState.logTracks
               vc.units = appState
             }
             if let vc = vc as? SettingsViewController {

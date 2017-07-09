@@ -11,7 +11,14 @@ import MapKit
 import CoreLocation
 
 public class LogTracks {
-  
+
+  public typealias TrackLogger = (GPXData.Track?, GPXData.TrackSeg?, TrackPoint?) -> Void
+  public typealias WaypointLogger = (GPXData.Waypoint) -> Void
+
+  var trackLoggers : [(Int,Filter,TrackLogger)] = []
+  var waypointLoggers : [(Int,Filter,WaypointLogger)] = []
+  var loggerId = 0
+
   
   public var gpx: GPXData
   public var isTracking: Bool = false
@@ -24,17 +31,27 @@ public class LogTracks {
   public func handleNewLocation(point pt: TrackPoint, isMajor: Bool) {
     
     if self.isTracking && isMajor {
-      gpx.tracks.last!.segments.last!.track.append(TrackPoint(location:pt.location, timestamp: pt.timestamp))
+      
+      if isMajor {
+        gpx.tracks.last!.segments.last!.track.append(TrackPoint(location:pt.location, timestamp: pt.timestamp))
+      }
+      
+      let track = gpx.tracks.last!
+      let seg = track.segments.last!
+      for logger in trackLoggers {
+        if !isMajor || logger.1.majorPoints {
+          logger.2(track, seg, pt)
+        }
+      }
     }
-    
   }
   
   public func startNewSegment() {
 
     if gpx.tracks.count == 0 {
-      gpx.tracks.append(GPXData.Track())
+      gpx.tracks.append(GPXData.Track(id:gpx.genId()))
     }
-    gpx.tracks.last!.segments.append(GPXData.TrackSeg())
+    gpx.tracks.last!.segments.append(GPXData.TrackSeg(id:gpx.genId()))
     isTracking = true
   }
   
@@ -43,7 +60,97 @@ public class LogTracks {
   }
   
   public func storeWaypoint(location pt: TrackPoint) {
-    gpx.waypoints.append(GPXData.Waypoint(point: pt, id: gpx.genId()))
+    let waypoint = GPXData.Waypoint(point: pt, id: gpx.genId())
+    
+      for logger in self.waypointLoggers {
+        logger.2(waypoint)
+      }
+
+  }
+  
+  public struct Filter {
+    let fullHistory: Bool
+    let majorPoints: Bool
+    public init(fullHistory: Bool = false, majorPoints: Bool = false) {
+      self.fullHistory = fullHistory
+      self.majorPoints = majorPoints
+    }
+  }
+  public func observeTrackData(_ filter: Filter, _ logger : @escaping TrackLogger) -> Token
+  {
+    loggerId += 1
+    let removeId = loggerId
+    self.trackLoggers.append((removeId,filter,logger))
+    
+    if filter.fullHistory {
+      for track in gpx.tracks {
+        for seg in track.segments {
+          logger(track, seg, nil)
+        }
+      }
+    }
+    
+    return TokenImpl {
+      for ix in self.trackLoggers.indices {
+        if self.trackLoggers[ix].0 == removeId {
+          self.trackLoggers.remove(at: ix)
+          break
+        }
+      }
+    }
+  }
+
+  public func observeWaypoints(_ filter: Filter, _ logger : @escaping WaypointLogger) -> Token
+  {
+    loggerId += 1
+    let removeId = loggerId
+    self.waypointLoggers.append((removeId,filter,logger))
+
+    if filter.fullHistory {
+      for waypoint in gpx.waypoints {
+        logger(waypoint)
+      }
+    }
+    
+    return TokenImpl {
+      for ix in self.waypointLoggers.indices {
+        if self.waypointLoggers[ix].0 == removeId {
+          self.waypointLoggers.remove(at: ix)
+          break
+        }
+      }
+    }
+  }
+
+  public func load(from other: GPXData) {
+    self.gpx.tracks = other.tracks
+    self.gpx.waypoints = other.waypoints
+    refreshObservers()
+  }
+  
+  func refreshObservers() {
+    for logger in trackLoggers {
+      if logger.1.fullHistory {
+        // clear all
+        logger.2(nil, nil, nil)
+      }
+    }
+    for track in self.gpx.tracks {
+      for seg in track.segments {
+        for logger in trackLoggers {
+          if logger.1.fullHistory {
+            logger.2(track, seg, nil)
+          }
+        }
+      }
+    }
+    for waypoint in self.gpx.waypoints {
+      for logger in waypointLoggers {
+        if logger.1.fullHistory {
+          logger.2(waypoint)
+        }
+      }
+    }
   }
 }
 
@@ -131,10 +238,6 @@ public class MapTracks {
     min_lon = Double.greatestFiniteMagnitude
     max_lon = -Double.greatestFiniteMagnitude
 
-    if gpx.tracks.count == 0 {
-      gpx.tracks.append(GPXData.Track())
-    }
-    gpx.tracks.last!.segments.append(GPXData.TrackSeg())
     isTracking = true
     isStartingSegment = true
   }
@@ -147,8 +250,8 @@ public class MapTracks {
     }  
   }
   
-  public func storeWaypoint(location pt: TrackPoint) {
-    let ann = WaypointAnnotation(coordinate: pt.location)
+  public func storeWaypoint(_ waypoint: GPXData.Waypoint) {
+    let ann = WaypointAnnotation(coordinate: waypoint.point.location)
     self.mapView.addAnnotation(ann)
   }
   

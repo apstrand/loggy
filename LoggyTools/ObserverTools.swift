@@ -31,3 +31,22 @@ class TokenImpl: Token {
     remover()
   }
 }
+
+/*
+class TokenImplList<T> : Token where T : MutableCollection {
+  var list : T
+  let removeId : Int
+  init(_ list: T, removeId: Int) {
+    self.list = list
+    self.removeId = removeId
+  }
+  deinit {
+    for ix in self.list.indices {
+      if self.list[ix].0 == self.removeId {
+        self.list.remove(at: ix)
+        break
+      }
+    }
+  }
+}
+*/
