@@ -13,6 +13,8 @@
 		D011DECF1EFC052100A80A77 /* LoggyTools.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D011DEC71EFC052100A80A77 /* LoggyTools.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D011DED41EFC09CC00A80A77 /* GPSTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D051220C1EF8A31800E7D825 /* GPSTracker.swift */; };
 		D01E83DD1F0D8C740038AF73 /* ObserverTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01E83DC1F0D8C740038AF73 /* ObserverTools.swift */; };
+		D01E83E71F16B4530038AF73 /* MapTracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01E83E61F16B4530038AF73 /* MapTracks.swift */; };
+		D01E83E91F16B4690038AF73 /* LogTracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01E83E81F16B4690038AF73 /* LogTracks.swift */; };
 		D05121FB1EF867DB00E7D825 /* LoggyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */; };
 		D05121FD1EF867DB00E7D825 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */; };
 		D05122001EF867DB00E7D825 /* LoggyMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05121FE1EF867DB00E7D825 /* LoggyMain.storyboard */; };
@@ -20,7 +22,6 @@
 		D05122051EF867DB00E7D825 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D05122031EF867DB00E7D825 /* LaunchScreen.storyboard */; };
 		D05DE32F1F082812007748D1 /* LoggyTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DE32E1F082812007748D1 /* LoggyTest.swift */; };
 		D05DE3341F082829007748D1 /* GPXData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0066E9F1EFF4B4C001225DD /* GPXData.swift */; };
-		D05DE3351F082833007748D1 /* TrackTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1711F05FB9B000BC92D /* TrackTools.swift */; };
 		D05DE3361F082836007748D1 /* UnitHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1791F060837000BC92D /* UnitHandling.swift */; };
 		D05DE3391F083C48007748D1 /* short_track_wpt.gpx in Resources */ = {isa = PBXBuildFile; fileRef = D05DE3381F083C48007748D1 /* short_track_wpt.gpx */; };
 		D06096B11F07EEDA002158DB /* LoggyTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D011DEC71EFC052100A80A77 /* LoggyTools.framework */; };
@@ -37,7 +38,6 @@
 		D0C951071F098D50005E08D7 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C951061F098D50005E08D7 /* AppState.swift */; };
 		D0C951091F09F681005E08D7 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C951081F09F681005E08D7 /* Settings.swift */; };
 		D0C9B16F1F05F7EF000BC92D /* LabelTapHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B16E1F05F7EF000BC92D /* LabelTapHandler.swift */; };
-		D0C9B1721F05FB9B000BC92D /* TrackTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1711F05FB9B000BC92D /* TrackTools.swift */; };
 		D0C9B1741F06005D000BC92D /* FileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1731F06005C000BC92D /* FileLogger.swift */; };
 		D0C9B1781F0607C7000BC92D /* CameraPhotosObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C9B1771F0607C7000BC92D /* CameraPhotosObserver.swift */; };
 /* End PBXBuildFile section */
@@ -79,6 +79,8 @@
 		D011DEC91EFC052100A80A77 /* LoggyTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoggyTools.h; sourceTree = "<group>"; };
 		D011DECA1EFC052100A80A77 /* LoggyTools_Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = LoggyTools_Info.plist; sourceTree = "<group>"; };
 		D01E83DC1F0D8C740038AF73 /* ObserverTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObserverTools.swift; sourceTree = "<group>"; };
+		D01E83E61F16B4530038AF73 /* MapTracks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapTracks.swift; sourceTree = "<group>"; };
+		D01E83E81F16B4690038AF73 /* LogTracks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogTracks.swift; sourceTree = "<group>"; };
 		D05121F71EF867DB00E7D825 /* Loggy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Loggy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05121FA1EF867DB00E7D825 /* LoggyAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggyAppDelegate.swift; sourceTree = "<group>"; };
 		D05121FC1EF867DB00E7D825 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
@@ -104,7 +106,6 @@
 		D0C951061F098D50005E08D7 /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		D0C951081F09F681005E08D7 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		D0C9B16E1F05F7EF000BC92D /* LabelTapHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTapHandler.swift; sourceTree = "<group>"; };
-		D0C9B1711F05FB9B000BC92D /* TrackTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTools.swift; sourceTree = "<group>"; };
 		D0C9B1731F06005C000BC92D /* FileLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileLogger.swift; sourceTree = "<group>"; };
 		D0C9B1751F06077C000BC92D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D0C9B1771F0607C7000BC92D /* CameraPhotosObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPhotosObserver.swift; sourceTree = "<group>"; };
@@ -158,7 +159,8 @@
 				D0C9B1731F06005C000BC92D /* FileLogger.swift */,
 				D051220C1EF8A31800E7D825 /* GPSTracker.swift */,
 				D0066E9F1EFF4B4C001225DD /* GPXData.swift */,
-				D0C9B1711F05FB9B000BC92D /* TrackTools.swift */,
+				D01E83E61F16B4530038AF73 /* MapTracks.swift */,
+				D01E83E81F16B4690038AF73 /* LogTracks.swift */,
 				D0C9B1791F060837000BC92D /* UnitHandling.swift */,
 				D011DEC91EFC052100A80A77 /* LoggyTools.h */,
 				D011DECA1EFC052100A80A77 /* LoggyTools_Info.plist */,
@@ -514,12 +516,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D011DED41EFC09CC00A80A77 /* GPSTracker.swift in Sources */,
-				D0C9B1721F05FB9B000BC92D /* TrackTools.swift in Sources */,
 				D06096B31F07F1F7002158DB /* UnitHandling.swift in Sources */,
 				D01E83DD1F0D8C740038AF73 /* ObserverTools.swift in Sources */,
 				D0066EA01EFF4B4C001225DD /* GPXData.swift in Sources */,
 				D0C9B1781F0607C7000BC92D /* CameraPhotosObserver.swift in Sources */,
+				D01E83E71F16B4530038AF73 /* MapTracks.swift in Sources */,
 				D06096B21F07F1AF002158DB /* Constants.swift in Sources */,
+				D01E83E91F16B4690038AF73 /* LogTracks.swift in Sources */,
 				D0C951091F09F681005E08D7 /* Settings.swift in Sources */,
 				D0C9B1741F06005D000BC92D /* FileLogger.swift in Sources */,
 				D0C9B16F1F05F7EF000BC92D /* LabelTapHandler.swift in Sources */,
@@ -542,7 +545,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D05DE3351F082833007748D1 /* TrackTools.swift in Sources */,
 				D05DE32F1F082812007748D1 /* LoggyTest.swift in Sources */,
 				D05DE3361F082836007748D1 /* UnitHandling.swift in Sources */,
 				D05DE3341F082829007748D1 /* GPXData.swift in Sources */,
