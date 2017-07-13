@@ -33,6 +33,7 @@ class LoggyAppDelegate: UIResponder, UIApplicationDelegate {
             }
             if let vc = vc as? SettingsViewController {
               vc.settings = appState
+              vc.appState = appState
             }
             
           }

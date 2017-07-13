@@ -17,6 +17,7 @@ public struct SettingName {
   public static let LocationUnit = "location_unit"
   public static let BearingUnit = "bearing_unit"
   public static let TrackingEnabled = "tracking_enabled"
+  public static let AutoSaveGen = "auto_save_gen"
 }
 
 

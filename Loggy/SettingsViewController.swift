@@ -16,6 +16,7 @@ class SettingsViewController: UIViewController {
   @IBOutlet weak var powerSaveToggle: UISwitch!
   
   var settings: SettingsRW!
+  var appState: AppFileState!
 
   required init?(coder aCoder: NSCoder) {
     super.init(coder: aCoder)
@@ -30,6 +31,10 @@ class SettingsViewController: UIViewController {
   
   }
     
+  @IBAction func clearTracksAction(_ sender: Any) {
+    appState.clearAndBumpAutoSave()
+  }
+  
   @IBAction func toggleAutowaypoint(sender: UISwitch) {
     settings.update(value: sender.isOn ? "true" : "false", forKey: SettingName.AutoWaypoint)
   }

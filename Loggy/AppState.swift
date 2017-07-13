@@ -12,6 +12,10 @@ import LoggyTools
 protocol GPSController {
   func gpxData() -> GPXData
   func gps() -> GPSTracker
+}
+
+protocol AppFileState {
+  func clearAndBumpAutoSave()
   func load(path: URL) throws
   func save(path: URL) throws
 }
@@ -34,6 +38,7 @@ struct LoggySettings: SettingsDefaults {
         SettingName.SpeedUnit: SpeedUnit.KM_H.rawValue,
         SettingName.LocationUnit: LocationUnit.DMS.rawValue,
         SettingName.BearingUnit: BearingUnit.Deg.rawValue,
+        SettingName.AutoSaveGen: "0",
         SettingName.PowerSave: "false"
       ]
     }
@@ -46,7 +51,7 @@ struct LoggySettings: SettingsDefaults {
   }()
 }
 
-class AppState: SettingsImpl<LoggySettings>, UnitController, SettingsRW {
+class AppState: SettingsImpl<LoggySettings>, UnitController, SettingsRW, AppFileState {
 
   var gpxInst = GPXData()
   let gpsModule = GPSTracker()
@@ -94,42 +99,68 @@ class AppState: SettingsImpl<LoggySettings>, UnitController, SettingsRW {
       self.pingAutoSave(self.gpxData())
     }
     
-    self.photosObserver = CameraPhotosObserver({ loc, date in
-      print("Found photo at \(loc) taken on \(date)")
-      if self.isSet(SettingName.AutoWaypoint) {
-        if let date = date {
-          self.logTracks.storeWaypoint(location: TrackPoint(location:loc.coordinate, timestamp:date))
-        } else {
-          print("No date in photo!")
-        }
+    regs += self.observe(key: SettingName.AutoWaypoint) { value in
+      if value == "true" {
+        self.photosObserver = CameraPhotosObserver({ loc, date in
+          print("Found photo at \(loc) taken on \(date?.description ?? "-")")
+          if self.isSet(SettingName.AutoWaypoint) {
+            if let date = date {
+              self.logTracks.storeWaypoint(location: TrackPoint(location:loc.coordinate, timestamp:date))
+            } else {
+              print("No date in photo!")
+            }
+          }
+        })
+      } else {
+        self.photosObserver = nil
       }
-    })
+    }
 
   }
 
-  var persistURL : URL = {
+  func persistURL() -> URL {
     let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true);
     if paths.count > 0 {
-      return URL(fileURLWithPath:paths[0], isDirectory:true).appendingPathComponent("persist.gpx", isDirectory:false)
+      if let str = self.value(forKey: SettingName.AutoSaveGen), let gen = Int(str) {
+        return URL(fileURLWithPath:paths[0], isDirectory:true).appendingPathComponent("persist-\(gen).gpx", isDirectory:false)
+      }
     }
     fatalError("Cannot find documents directory!")
-  }()
-  
+  }
+
+  func clearAndBumpAutoSave() {
+    var next = 0
+    if let seq = value(forKey: SettingName.AutoSaveGen) {
+      if let seqno = Int(seq) {
+        next = seqno+1
+      }
+    }
+    update(value: "\(next)", forKey: SettingName.AutoSaveGen)
+
+    let gpx = GPXData()
+    self.logTracks.load(from: gpx)
+
+    autoSave()
+  }
+
   func didFinishLaunching() {
-    load(path: persistURL)
+    load(path: persistURL())
   }
   
   func didEnterBackground() {
-    save(path: persistURL)
+    save(path: persistURL())
   }
   
   func autoSave() {
-    save(path: persistURL)
+    save(path: persistURL())
   }
   
   private var pendingAutoSave = false
+  private var lastAutoSaveState = 0
   func pingAutoSave(_ gpx: GPXData) {
-    if !self.pendingAutoSave {
+    let check = gpx.genId()
+    if check != lastAutoSaveState+1 && !self.pendingAutoSave {
+      print("autosave [\(check) vs \(lastAutoSaveState+1)]")
       self.pendingAutoSave = true
       DispatchQueue.global(qos: .background).asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.seconds(2)) {
         self.autoSave()
@@ -138,6 +169,7 @@ class AppState: SettingsImpl<LoggySettings>, UnitController, SettingsRW {
         }
       }
     }
+    lastAutoSaveState = check
   }
 }
 
@@ -149,7 +181,6 @@ extension AppState: GPSController
   func gps() -> GPSTracker {
     return gpsModule
   }
-
   
   func load(path: URL) {
     DispatchQueue.global(qos: .background).async {

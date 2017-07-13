@@ -35,6 +35,8 @@ class TrackViewController: UIViewController,
   
   @IBOutlet weak var tableView: UITableView!
 
+  @IBOutlet weak var exportButton: UIButton!
+  @IBOutlet weak var selectButton: UIButton!
   required init?(coder aCoder: NSCoder) {
     super.init(coder: aCoder)
   }
@@ -110,7 +112,12 @@ class TrackViewController: UIViewController,
     super.viewDidAppear(animated)
     tableView.flashScrollIndicators()
   }
+  @IBAction func selectAction(_ sender: Any) {
+  }
   
+  @IBAction func exportAction(_ sender: Any) {
+  }
+
   func waypointToRowData(_ waypoint: GPXData.Waypoint) -> RowData {
     let pt = waypoint.point
     let loc = String(format: "%.3f %.3f", pt.location.latitude, pt.location.longitude)

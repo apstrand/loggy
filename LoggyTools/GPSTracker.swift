@@ -57,6 +57,7 @@ public class GPSTracker {
       loc_mgr.startUpdatingLocation()
       print("GPS.startUpdatingLocation()")
       isActive = true
+      pendingTracking = false
       self.state_callback?(isActive)
     }
   }
@@ -68,7 +69,7 @@ public class GPSTracker {
     if !isActive {
       start()
     }
-    assert(isActive == (self.locationTrackers.count > 0))
+    assert((isActive || pendingTracking) == (self.locationTrackers.count > 0))
     return TokenImpl {
       if let ix = self.locationTrackers.index(of: removeId) {
         self.locationTrackers.remove(at: ix)
@@ -98,7 +99,8 @@ public class GPSTracker {
     pendingTracking = true
     
     internalStart()
-    assert(isActive == (self.locationTrackers.count > 0))
+    assert(isActive != pendingTracking);
+    assert((isActive || pendingTracking) == (self.locationTrackers.count > 0))
   }
   
   private func internalStart() {

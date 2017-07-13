@@ -34,13 +34,12 @@ open class SettingsImpl<Settings : SettingsDefaults>: SettingsReader, SettingsWr
   }
   
   public func isSet(_ key: String) -> Bool {
-    let defaults = Settings.userDefaults
-    return defaults.string(forKey: key) == "true"
+    return value(forKey: key) == "true"
   }
   
   public func value(forKey key: String) -> String? {
     let defaults = Settings.userDefaults
-    return defaults.string(forKey: key)
+    return defaults.string(forKey: key) ?? Settings.defaults[key]
   }
   
   public func update(value: String, forKey key: String) {
