@@ -152,7 +152,7 @@ public enum LocationUnit : String, Unit {
     let dec = Int(d)
     let min = Int((d - Double(dec)) * 60)
     let sec = (d - Double(dec) - Double(min)/60)*3600
-    return (neg ? labels.0 : labels.1) + String(format:" %d° %d' %f\"", dec, min, sec)
+    return (neg ? labels.0 : labels.1) + String(format:" %d° %d' %.2f\"", dec, min, sec)
   }
   
   public func format(_ value : ValueType, separator: String = " ") -> String {

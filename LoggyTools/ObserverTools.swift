@@ -12,8 +12,11 @@ public class Token {
 }
 
 public class TokenRegs {
-  var tokens: [Token] = []
+  fileprivate var tokens: [Token] = []
   public init() { }
+  public func release() {
+    tokens.removeAll()
+  }
 }
 
 public func +=(regs: inout TokenRegs, token: Token) {

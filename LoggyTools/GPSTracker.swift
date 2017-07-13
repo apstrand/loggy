@@ -15,6 +15,7 @@ public class GPSTracker {
   public typealias StateMonitor = (Bool) -> Void
 
   var loggers : [(Int,TrackPointLogger)] = []
+  var locationTrackers: [Int] = []
   var loggerId = 0
   let loc_mgr : CLLocationManager
   var pendingTracking = false
@@ -54,10 +55,30 @@ public class GPSTracker {
   func startPendingTracking() {
     if pendingTracking || pendingOneshotTracking.count > 0{
       loc_mgr.startUpdatingLocation()
+      print("GPS.startUpdatingLocation()")
       isActive = true
       self.state_callback?(isActive)
     }
   }
+  
+  public func requestLocationTracking() -> Token {
+    loggerId += 1
+    let removeId = loggerId
+    self.locationTrackers.append(removeId)
+    if !isActive {
+      start()
+    }
+    assert(isActive == (self.locationTrackers.count > 0))
+    return TokenImpl {
+      if let ix = self.locationTrackers.index(of: removeId) {
+        self.locationTrackers.remove(at: ix)
+        if self.locationTrackers.isEmpty {
+          self.stop()
+        }
+      }
+    }
+  }
+  
   public func addTrackPointLogger(_ logger : @escaping TrackPointLogger) -> Token {
     loggerId += 1
     let removeId = loggerId
@@ -73,10 +94,11 @@ public class GPSTracker {
   }
   
 
-  public func start() {
+  private func start() {
     pendingTracking = true
     
     internalStart()
+    assert(isActive == (self.locationTrackers.count > 0))
   }
   
   private func internalStart() {
@@ -96,12 +118,14 @@ public class GPSTracker {
     
   }
   
-  public func stop() {
+  private func stop() {
     pendingTracking = false
     internalStop()
+    assert(isActive == (self.locationTrackers.count > 0))
   }
   
   fileprivate func internalStop() {
+    print("GPS.stopUpdatingLocation()")
     loc_mgr.stopUpdatingLocation()
     isActive = false
     self.state_callback?(isActive)
@@ -146,7 +170,7 @@ public class GPSTracker {
 //      print("Tells the delegate that new location data is available: [\(locs)]")
       var last_pt : TrackPoint?
       for loc in locs {
-        let pt = TrackPoint(location: loc.coordinate, timestamp: loc.timestamp)
+        let pt = TrackPoint(location: loc)
         parent.handleNewLocation(pt)
         last_pt = pt
       }

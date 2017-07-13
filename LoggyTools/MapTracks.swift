@@ -62,7 +62,6 @@ public class MapTracks {
   }
   
   public func handleNewLocation(point pt: TrackPoint, isMajor: Bool) {
-    assert(isTracking)
     
     if self.isTracking && isMajor {
       self.add(pt.location)
@@ -82,12 +81,7 @@ public class MapTracks {
       self.currentPoly = newPoly
     }
     
-    
-    if let region = self.region() {
-      self.mapView.setRegion(region, animated: true)
-    } else {
-      self.mapView.setCenter(pt.location, animated: true)
-    }
+    self.mapView.setRegion(region(center:pt.location), animated: true)
 
   }
   
@@ -125,7 +119,7 @@ public class MapTracks {
     coordCache.append(coord)
   }
   
-  public func region() -> MKCoordinateRegion? {
+  public func region(center: CLLocationCoordinate2D) -> MKCoordinateRegion {
     var span: MKCoordinateSpan
     if coordCache.count > 1 {
       span = MKCoordinateSpan(
@@ -134,12 +128,7 @@ public class MapTracks {
     } else {
       span = MKCoordinateSpan(latitudeDelta: MinLatSpan, longitudeDelta: MinLonSpan)
     }
-    if let last = coordCache.last {
-      let coordReg = MKCoordinateRegion(center: last, span: span)
-      return coordReg
-    } else {
-      return nil
-    }
+    return MKCoordinateRegion(center: center, span: span)
   }
   
   class MapDelegate : NSObject, MKMapViewDelegate {
@@ -149,9 +138,6 @@ public class MapTracks {
     }
     
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-      if !parent.isTracking {
-        parent.mapView.setCenter(userLocation.coordinate, animated: true)
-      }
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {

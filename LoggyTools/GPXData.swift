@@ -16,6 +16,14 @@ public struct TrackPoint {
   public let speed : Double?
   public let bearing : Double?
   public let name : String?
+  public init(location: CLLocation) {
+    self.location = location.coordinate
+    self.timestamp = location.timestamp
+    self.name = nil
+    self.elevation = location.altitude
+    self.speed = location.speed
+    self.bearing = location.course
+  }
   public init(location: CLLocationCoordinate2D, timestamp: Date,
               name: String? = nil, elevation: Double? = nil,
               speed: Double? = nil, bearing: Double? = nil)

@@ -37,6 +37,7 @@ class DashboardViewController: UIViewController {
   var units: UnitController!
   var logTracks: LogTracks!
   var regs = TokenRegs()
+  var gpsRegs = TokenRegs()
 
   var isTracking: Bool {
     get {
@@ -103,18 +104,27 @@ class DashboardViewController: UIViewController {
 //      self.updateInterfaceState(isTracking: self.isTracking)
 //    }
     
-    regs += self.logTracks.observeTrackData(LogTracks.Filter(majorPoints: true)) { track, seg, point in
-      if let pt = point {
-        self.updateLocationInfo(pt)
-        self.mapTracks.handleNewLocation(point:pt, isMajor:true)
-      }
+    regs += gpsController.gps().addTrackPointLogger {
+      point, isMajor in
+      self.updateLocationInfo(point)
+      self.mapTracks.handleNewLocation(point:point, isMajor:isMajor)
     }
     
-    regs += self.logTracks.observeWaypoints(LogTracks.Filter()) { waypoint in
+    regs += self.logTracks.observeWaypoints(LogTracks.Filter(trackingOnly: false)) { waypoint in
       self.updateLocationInfo(waypoint.point, color: UIColor.blue)
       print("Store waypoint [location \(waypoint.point.location)] [date \(waypoint.point.timestamp)]")
       self.mapTracks.storeWaypoint(waypoint)
     }
+    
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    gpsRegs += gpsController.gps().requestLocationTracking()
+  }
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    gpsRegs.release()
   }
 
   func updateInterfaceState(isTracking: Bool) {

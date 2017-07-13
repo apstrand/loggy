@@ -67,7 +67,7 @@ class TrackViewController: UIViewController,
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    regs += logTracks.observeTrackData(LogTracks.Filter(fullHistory:true)) { track, seg, point in
+    regs += logTracks.observeTrackData(LogTracks.Filter(trackingOnly: true, fullHistory:true)) { track, seg, point in
       if track == nil {
         print("TrackView: reload all")
         self.rows.removeAll()
@@ -89,7 +89,7 @@ class TrackViewController: UIViewController,
         ix = self.rows.index(before: ix)
       }
     }
-    regs += logTracks.observeWaypoints(LogTracks.Filter(fullHistory:true)) { waypoint in
+    regs += logTracks.observeWaypoints(LogTracks.Filter(trackingOnly: false, fullHistory:true)) { waypoint in
       self.rows.append(self.waypointToRowData(waypoint))
       if self.tableViewLoaded {
         self.tableView.insertRows(at: [IndexPath(row: self.rows.count-1, section: 0)], with: .automatic)

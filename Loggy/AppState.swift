@@ -61,6 +61,7 @@ class AppState: SettingsImpl<LoggySettings>, UnitController, SettingsRW {
   var photosObserver: CameraPhotosObserver!
 
   var regs = TokenRegs()
+  var gpsRegs = TokenRegs()
   
   public override init() {
     super.init()
@@ -80,9 +81,9 @@ class AppState: SettingsImpl<LoggySettings>, UnitController, SettingsRW {
     
     regs += self.observe(key: SettingName.TrackingEnabled) { value in
       if (value == "true") {
-        self.gps().start()
+        self.gpsRegs += self.gpsModule.requestLocationTracking()
       } else {
-        self.gps().stop()
+        self.gpsRegs.release()
       }
     }
     
@@ -162,7 +163,7 @@ extension AppState: GPSController
   
   func save(path: URL) {
     let str = gpxInst.to_string()
-    print("\nSaving:\n"+str)
+//    print("\nSaving:\n"+str)
     DispatchQueue.global(qos: .background).async {
       do {
         try str.write(to: path, atomically: true, encoding: .utf8)

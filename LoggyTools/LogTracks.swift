@@ -12,37 +12,26 @@ import CoreLocation
 
 public class LogTracks {
   
+  public typealias LocationLogger = (TrackPoint, Bool) -> Void
   public typealias TrackLogger = (GPXData.Track?, GPXData.TrackSeg?, TrackPoint?) -> Void
   public typealias WaypointLogger = (GPXData.Waypoint) -> Void
   
   var trackLoggers : [(Int,Filter,TrackLogger)] = []
   var waypointLoggers : [(Int,Filter,WaypointLogger)] = []
   var loggerId = 0
-  
+  var regs = TokenRegs()
   
   public var gpx: GPXData
   public var isTracking: Bool = false
   
   public init(_ gpx: GPXData) {
     self.gpx = gpx
-    
+   
   }
   
   public func handleNewLocation(point pt: TrackPoint, isMajor: Bool) {
-    
-    if self.isTracking && isMajor {
-      
-      if isMajor {
-        gpx.tracks.last!.segments.last!.track.append(TrackPoint(location:pt.location, timestamp: pt.timestamp))
-      }
-      
-      let track = gpx.tracks.last!
-      let seg = track.segments.last!
-      for logger in trackLoggers {
-        if !isMajor || logger.1.majorPoints {
-          logger.2(track, seg, pt)
-        }
-      }
+    if isTracking {
+      self.gpx.tracks.last!.segments.last!.track.append(TrackPoint(location:pt.location, timestamp: pt.timestamp))
     }
   }
   
@@ -71,11 +60,15 @@ public class LogTracks {
   public struct Filter {
     let fullHistory: Bool
     let majorPoints: Bool
-    public init(fullHistory: Bool = false, majorPoints: Bool = false) {
+    let trackingOnly: Bool
+    public init(trackingOnly: Bool, fullHistory: Bool = false, majorPoints: Bool = false) {
       self.fullHistory = fullHistory
+      self.trackingOnly = trackingOnly
       self.majorPoints = majorPoints
     }
   }
+  
+  
   public func observeTrackData(_ filter: Filter, _ logger : @escaping TrackLogger) -> Token
   {
     loggerId += 1

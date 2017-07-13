@@ -62,9 +62,7 @@ open class SettingsImpl<Settings : SettingsDefaults>: SettingsReader, SettingsWr
       listeners[key] = [(listenerId, callback)]
     }
     if let val = value(forKey: key) ?? Settings.defaults[key] {
-      DispatchQueue.main.async {
-        callback(val)
-      }
+      callback(val)
     }
     let removeId = listenerId
     return TokenImpl {
