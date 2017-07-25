@@ -30,11 +30,20 @@ class SettingsViewController: UIViewController {
 
   
   }
-    
+
   @IBAction func clearTracksAction(_ sender: Any) {
     appState.clearAndBumpAutoSave()
   }
-  
+
+  @IBAction func openSettingsAction(_ sender: Any) {
+    let app = UIApplication.shared
+    if let url = URL(string:UIApplicationOpenSettingsURLString) {
+      if app.canOpenURL(url) {
+        app.open(url, options: [:], completionHandler: { result in return } )
+      }
+    }
+  }
+
   @IBAction func toggleAutowaypoint(sender: UISwitch) {
     settings.update(value: sender.isOn ? "true" : "false", forKey: SettingName.AutoWaypoint)
   }
